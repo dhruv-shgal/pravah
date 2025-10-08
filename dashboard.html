@@ -70,6 +70,24 @@
             .hero-card { grid-template-columns: 1fr; }
             .two-col { grid-template-columns: 1fr; }
         }
+
+        @media (max-width: 768px) {
+            .container { padding: 16px; margin-top: 72px; }
+            .nav-links { gap: 12px; }
+            .section-title { font-size: 16px; }
+            .hero-img { height: 220px; }
+            .years { font-size: 36px; }
+            .chart-wrap { height: 260px; }
+        }
+
+        @media (max-width: 480px) {
+            .logo { font-size: 0.95rem; }
+            .input, .select { font-size: 14px; }
+            .btn-primary { width: 100%; }
+            .hero-img { height: 200px; }
+            .years { font-size: 32px; }
+            .chart-wrap { height: 220px; }
+        }
     </style>
 </head>
 <body>
