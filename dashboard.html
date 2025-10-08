@@ -364,26 +364,19 @@
         }
 
         async function onSelectionChange(){
-            const state = document.getElementById('stateSelect').value;
             const category = document.getElementById('categorySelect').value; // wildlife or aquatic
             const analyzeBtn = document.getElementById('analyzeBtn');
-            // Currently only Karnataka + wildlife has species CSV mapping
-            if (state === 'Karnataka' && category === 'wildlife') {
+            // Show same data for all states: wildlife → karnataka dataset, aquatic → aquatic dataset
+            if (category === 'wildlife') {
                 currentDatasetKey = 'karnataka';
                 await ensureLoaded('karnataka');
                 fillSpeciesOptions('karnataka');
-                analyzeBtn.disabled = false;
-            } else if (category === 'aquatic') {
+            } else {
                 currentDatasetKey = 'aquatic';
                 await ensureLoaded('aquatic');
                 fillSpeciesOptions('aquatic');
-                analyzeBtn.disabled = false;
-            } else {
-                // no data wired for other states yet
-                currentDatasetKey = null;
-                document.getElementById('speciesSelect').innerHTML = '<option value="random">Random Species</option>';
-                analyzeBtn.disabled = true;
             }
+            analyzeBtn.disabled = false;
         }
 
         function findMatchByName(list, query){
