@@ -85,6 +85,23 @@
             list-style: none;
         }
 
+        /* Mobile menu button */
+        .menu-btn {
+            display: none;
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 10px;
+            background: var(--bg-white);
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .menu-icon { width: 18px; height: 2px; background: var(--text-dark); position: relative; }
+        .menu-icon::before, .menu-icon::after { content:""; position:absolute; left:0; width:100%; height:2px; background: var(--text-dark); }
+        .menu-icon::before { top:-6px; }
+        .menu-icon::after { top:6px; }
+
         .nav-links a {
             color: var(--text-dark);
             text-decoration: none;
@@ -500,9 +517,23 @@
 
         @media (max-width: 768px) {
             .nav-links {
-                gap: 1rem;
-                font-size: 0.9rem;
+                position: absolute;
+                top: 64px;
+                right: 16px;
+                left: 16px;
+                background: var(--bg-white);
+                border: 1px solid rgba(0,0,0,0.06);
+                box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+                border-radius: 14px;
+                padding: 12px;
+                display: none;
+                flex-direction: column;
+                gap: 10px;
+                z-index: 1001;
             }
+            .menu-btn { display: inline-flex; }
+            .nav-links.show { display: flex; }
+            .nav-links a { padding: 10px 12px; border-radius: 8px; }
 
             .hero h1 {
                 font-size: 2.5rem;
@@ -541,7 +572,8 @@
                 <span class="logo-icon">🌿</span>
                 <span>PRAVAH</span>
             </a>
-            <ul class="nav-links">
+            <button class="menu-btn" id="menuBtn" aria-label="Open menu"><span class="menu-icon"></span></button>
+            <ul class="nav-links" id="mobileMenu">
                 <li><a href="#home">Home</a></li>
                 <li><a href="dashboard.html">Dashboard</a></li>
                 <li><a href="eco-connect.html">Eco-Connect</a></li>
@@ -693,6 +725,13 @@
             section.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
+        // Mobile menu toggle
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        menuBtn.addEventListener('click', function(){
+            mobileMenu.classList.toggle('show');
+        });
+
         // Add smooth scroll to all nav links
         document.querySelectorAll('.nav-links a').forEach(link => {
             link.addEventListener('click', function(e) {
@@ -701,6 +740,7 @@
                     e.preventDefault();
                     const sectionId = href.substring(1);
                     scrollToSection(sectionId);
+                    mobileMenu.classList.remove('show');
                 }
             });
         });

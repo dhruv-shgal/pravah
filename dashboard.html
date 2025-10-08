@@ -23,6 +23,11 @@
         .logo { display:flex; align-items:center; gap:8px; font-weight:700; color:var(--primary); text-decoration:none; }
         .nav-links { display:flex; gap:20px; align-items:center; list-style:none; }
         .nav-links a { color:var(--text); text-decoration:none; font-weight:500; }
+        .menu-btn { display:none; width:40px; height:40px; border:1px solid var(--border); border-radius:10px; background:var(--card); align-items:center; justify-content:center; cursor:pointer; }
+        .menu-icon { width:18px; height:2px; background: var(--text); position:relative; }
+        .menu-icon::before, .menu-icon::after { content:""; position:absolute; left:0; width:100%; height:2px; background: var(--text); }
+        .menu-icon::before { top:-6px; }
+        .menu-icon::after { top:6px; }
         .nav-links a:hover { color:var(--primary); }
         .toggle-switch { position:relative; width:50px; height:26px; background:var(--muted); border-radius:30px; cursor:pointer; }
         .toggle-slider { position:absolute; top:3px; left:3px; width:20px; height:20px; background:#fff; border-radius:50%; transition: transform .25s ease; }
@@ -73,7 +78,9 @@
 
         @media (max-width: 768px) {
             .container { padding: 16px; margin-top: 72px; }
-            .nav-links { gap: 12px; }
+            .nav-links { position:absolute; top:64px; right:16px; left:16px; background:var(--card); border:1px solid var(--border); box-shadow:0 10px 30px rgba(0,0,0,0.08); border-radius:14px; padding:12px; display:none; flex-direction:column; gap:10px; z-index:1001; }
+            .nav-links.show { display:flex; }
+            .menu-btn { display:inline-flex; }
             .section-title { font-size: 16px; }
             .hero-img { height: 220px; }
             .years { font-size: 36px; }
@@ -94,7 +101,8 @@
     <nav class="navbar">
         <div class="nav-container">
             <a href="index.html" class="logo"><span>🌿</span><span>PRAVAH</span></a>
-            <ul class="nav-links">
+            <button class="menu-btn" id="menuBtn"><span class="menu-icon"></span></button>
+            <ul class="nav-links" id="mobileMenu">
                 <li><a href="index.html#home">Home</a></li>
                 <li><a href="dashboard.html">Dashboard</a></li>
                 <li><a href="eco-connect.html">Eco-Connect</a></li>
@@ -107,16 +115,15 @@
     <div class="container">
 
         <div class="filters">
-            <select class="select" id="datasetSelect">
-                <option value="random">Random Dataset</option>
-                <option value="aquatic">Aquatic Life</option>
-                <option value="karnataka">Karnataka Wildlife</option>
+            <select class="select" id="stateSelect"></select>
+            <select class="select" id="categorySelect">
+                <option value="wildlife">Wildlife</option>
+                <option value="aquatic">Aquatic</option>
             </select>
             <select class="select" id="speciesSelect">
                 <option value="random">Random Species</option>
             </select>
-            <input class="input" id="searchInput" placeholder="Search species (optional)" />
-            <button class="btn-primary" id="analyzeBtn">Analyze Species Threat</button>
+            <button class="btn-primary" id="analyzeBtn" disabled>Analyze Species Threat</button>
         </div>
 
         <div class="grid">
@@ -189,26 +196,60 @@
                 html.setAttribute('data-theme', cur); localStorage.setItem('theme', cur); this.classList.toggle('active');
                 if(window._trendChart){ window._trendChart.destroy(); renderChart(_lastSeries.labels, _lastSeries.values); }
             });
+            // Mobile menu
+            const menuBtn = document.getElementById('menuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            menuBtn.addEventListener('click', function(){ mobileMenu.classList.toggle('show'); });
         })();
 
-        const FILES = {
-            aquatic: 'aquaticlife_dataset.csv',
-            karnataka: 'karnataka_wildlife.csv'
-        };
+        const FILES = { aquatic: 'aquaticlife_dataset.csv', karnataka: 'karnataka_wildlife.csv' };
+        const STATES = ['Andhra Pradesh','Arunachal Pradesh','Assam','Bihar','Chhattisgarh','Goa','Gujarat','Haryana','Himachal Pradesh','Jharkhand','Karnataka','Kerala','Madhya Pradesh','Maharashtra','Manipur','Meghalaya','Mizoram','Nagaland','Odisha','Punjab','Rajasthan','Sikkim','Tamil Nadu','Telangana','Tripura','Uttar Pradesh','Uttarakhand','West Bengal','Andaman & Nicobar','Chandigarh','Dadra & Nagar Haveli and Daman & Diu','Delhi','Jammu & Kashmir','Ladakh','Lakshadweep','Puducherry'];
 
         let datasets = { aquatic: [], karnataka: [] };
         let currentDatasetKey = 'aquatic';
         let _lastSeries = { labels: [], values: [] };
 
+        function statusCategory(text){
+            const t = (text||'').toLowerCase();
+            if (t.includes('critically endangered') || t.includes('(cr)')) return 'CR';
+            if (t.includes('endangered')) return 'EN';
+            if (t.includes('near threatened')) return 'NT';
+            if (t.includes('least concern')) return 'LC';
+            if (t.includes('vulnerable')) return 'VU';
+            return 'UNK';
+        }
+
+        function estimateYearsFromStatus(status){
+            switch(statusCategory(status)){
+                case 'CR': return 40;
+                case 'EN': return 60;
+                case 'VU': return 100;
+                case 'NT': return 150;
+                case 'LC': return 200;
+                default: return 120;
+            }
+        }
+
+        function estimateCorrelationFromThreat(threat, status){
+            const s = statusCategory(status);
+            let base = 0.5;
+            if (s==='CR') base = 0.9; else if (s==='EN') base = 0.8; else if (s==='VU') base = 0.7; else if (s==='NT') base = 0.55; else if (s==='LC') base = 0.4;
+            if ((threat||'').toLowerCase().includes('overfishing') || (threat||'').toLowerCase().includes('poaching')) base += 0.05;
+            if ((threat||'').toLowerCase().includes('pollution')) base += 0.03;
+            return Math.max(0.2, Math.min(0.98, base));
+        }
+
         function normalizeAquatic(row){
+            const status = (row['Conservation_Status']||'').replace(/\.$/, '');
+            const threat = row['Dominant_Threats'] || '-';
             return {
                 common: row['Common_Name'],
                 scientific: row['Scientific_Name'],
-                status: (row['Conservation_Status']||'').replace(/\.$/, ''),
-                threat: row['Dominant_Threats'] || '-',
+                status,
+                threat,
                 suggestion: row['Conservation_Suggestions'] || '-',
-                correlation: 0.6,
-                years: 80
+                correlation: estimateCorrelationFromThreat(threat, status),
+                years: estimateYearsFromStatus(status)
             };
         }
         function normalizeKarnataka(row){
@@ -305,17 +346,32 @@
 
         async function ensureLoaded(key){ if (!datasets[key] || datasets[key].length===0) await loadCSV(key); }
 
-        async function onDatasetChange(){
-            const sel = document.getElementById('datasetSelect');
-            const val = sel.value==='random' ? (Math.random()>0.5?'aquatic':'karnataka') : sel.value;
-            currentDatasetKey = val;
-            await ensureLoaded(val);
-            fillSpeciesOptions(val);
-            // keep explicit selection intact if possible after refill
-            const chosen = document.getElementById('speciesSelect');
-            if (chosen.options.length > 1) {
-                // default to Random; user can choose species next
-                chosen.value = chosen.value || 'random';
+        function populateStates(){
+            const el = document.getElementById('stateSelect');
+            el.innerHTML = STATES.map(s=>`<option value="${s}">${s}</option>`).join('');
+            el.value = 'Karnataka';
+        }
+
+        async function onSelectionChange(){
+            const state = document.getElementById('stateSelect').value;
+            const category = document.getElementById('categorySelect').value; // wildlife or aquatic
+            const analyzeBtn = document.getElementById('analyzeBtn');
+            // Currently only Karnataka + wildlife has species CSV mapping
+            if (state === 'Karnataka' && category === 'wildlife') {
+                currentDatasetKey = 'karnataka';
+                await ensureLoaded('karnataka');
+                fillSpeciesOptions('karnataka');
+                analyzeBtn.disabled = false;
+            } else if (category === 'aquatic') {
+                currentDatasetKey = 'aquatic';
+                await ensureLoaded('aquatic');
+                fillSpeciesOptions('aquatic');
+                analyzeBtn.disabled = false;
+            } else {
+                // no data wired for other states yet
+                currentDatasetKey = null;
+                document.getElementById('speciesSelect').innerHTML = '<option value="random">Random Species</option>';
+                analyzeBtn.disabled = true;
             }
         }
 
@@ -345,17 +401,12 @@
         let _firstLoad = true;
         async function analyze(showLoading = true){
             if (showLoading && !_firstLoad) showOverlay();
-            // Ensure dataset is loaded but do not change species selection here
-            const ds = document.getElementById('datasetSelect').value;
-            currentDatasetKey = ds==='random' ? currentDatasetKey : ds;
-            if (!currentDatasetKey || currentDatasetKey==='random') currentDatasetKey = 'aquatic';
+            if (!currentDatasetKey) { hideOverlay(); return; }
             await ensureLoaded(currentDatasetKey);
             const list = datasets[currentDatasetKey];
             const speciesSel = document.getElementById('speciesSelect').value;
-            const searchQ = document.getElementById('searchInput').value;
             let item = null;
             if (speciesSel !== 'random') item = list[parseInt(speciesSel)];
-            if (!item && searchQ) item = findMatchByName(list, searchQ);
             if (!item) item = pickRandom(list);
 
             // simulate compute time
@@ -400,9 +451,13 @@
         // initial load
         (async function init(){
             await Promise.all([ensureLoaded('aquatic'), ensureLoaded('karnataka')]);
-            fillSpeciesOptions('aquatic');
-            analyze(false);
-            document.getElementById('datasetSelect').addEventListener('change', onDatasetChange);
+            populateStates();
+            document.getElementById('categorySelect').value = 'wildlife';
+            await onSelectionChange();
+            // Do not auto-analyze on first load; wait for user click
+            document.getElementById('stateSelect').addEventListener('change', onSelectionChange);
+            document.getElementById('categorySelect').addEventListener('change', onSelectionChange);
+            // Only analyze on explicit button click
             document.getElementById('analyzeBtn').addEventListener('click', function(){ analyze(true); });
         })();
     </script>
