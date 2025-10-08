@@ -1,0 +1,121 @@
+Species_Name,Scientific_Name,Conservation_Status,Dominant_Threat_Factor,Correlation_Value,Years_Max,Population_Trend_Summary,Conservation_Suggestion
+Lion-tailed Macaque,Macaca silenus,Endangered,Habitat loss and fragmentation,0.88,60,Declining,"Stop encroachment, control hunting, prevent road-kills, manage fragmentation, restore degraded habitats, and implement conservation breeding."
+Bonnet Macaque,Macaca radiata,Vulnerable,Human-wildlife conflict,0.75,100,Population decreasing,Plan effective conservation strategies for this commensal species before its status worsens.
+Nilgiri Langur,Semnopithecus johnii,Vulnerable,Habitat destruction and poaching,0.78,100,Population decreasing,"Implement conservation plans including training forest staff, conflict resolution, and community involvement."
+Tufted Grey Langur,Semnopithecus priam,Near Threatened,"Habitat loss, degradation, and fragmentation",0.55,150,Population decreasing,"Focus on resolving human-primate conflicts, especially crop raiding, through community-based programs."
+Grey Slender Loris,Loris lydekkerianus,Near Threatened,Habitat loss and fragmentation; poaching,0.58,150,Population decreasing,The involvement of local communities and the forest department is essential for creating awareness and monitoring conflict zones.
+South-western Langur,Semnopithecus hypoleucos,Least Concern,Habitat loss and fragmentation; human-langur conflicts,0.25,200,Generally stable,Conservation strategies should be community-focused to address human-primate conflicts.
+Bengal Tiger,Panthera tigris,Endangered,Poaching for Illegal Wildlife Trade,0.93,60,Still at high risk despite conservation success,"Strengthen anti-poaching patrols, implement stricter law enforcement, and establish wildlife corridors."
+Indian Leopard,Panthera pardus,Vulnerable,Human-leopard conflict; illegal trade in skins,0.84,100,Population is declining,Focus on mitigating human-leopard conflict through community education. Protecting and restoring habitat connectivity is also essential.
+Indian Grey Wolf,Canis lupus pallipes,Endangered (in India),Habitat destruction and persecution by humans,0.83,60,"Population estimated at 2,000-3,000 individuals; declining","Focus on promoting coexistence with humans, including community education and compensation programs for livestock loss."
+Dhole (Indian Wild Dog),Cuon alpinus,Endangered,Habitat Loss and Prey Depletion,0.85,60,"Population decreasing, estimated at fewer than 2,500 mature individuals","Protect forest habitats and the prey species they depend on, and prevent forest fragmentation."
+Golden Jackal,Canis aureus,Least Concern,Human-wildlife conflict and habitat loss,0.2,200,Widespread and common,Conservation efforts should focus on public awareness programs to reduce human-jackal conflict and on creating coexistence strategies.
+Striped Hyena,Hyaena hyaena,Near Threatened,Persecution by humans; habitat loss and road kills,0.59,150,Population is dwindling in many parts of its range,Community-based conservation is key to changing negative perceptions and minimizing human-hyena conflict.
+Sloth Bear,Melursus ursinus,Vulnerable,Habitat loss and fragmentation; human-wildlife conflict; poaching,0.82,100,Decreasing overall due to habitat loss and human conflict,Protect and connect large forest patches to create wildlife corridors. Reducing human-bear conflict is also crucial.
+Rusty-spotted Cat,Prionailurus rubiginosus,Near Threatened,Habitat loss; persecution by farmers,0.5,150,Overall population is declining,Conservation needs to focus on habitat preservation. Community education is essential to reduce retaliatory killing.
+Jungle Cat,Felis chaus,Least Concern,Habitat loss (wetlands); persecution,0.35,200,Wide range and adaptable nature,Protect its wetland habitats. Public awareness about the species' importance in controlling rodent populations is vital.
+Leopard Cat,Prionailurus bengalensis,Least Concern,Habitat loss and fragmentation; poaching for fur/pet trade,0.3,200,Widespread and common,Conservation efforts should focus on regulating the illegal pet trade and enforcing laws that protect the species.
+Fishing Cat,Prionailurus viverrinus,Vulnerable,Wetland degradation/destruction; pollution; retaliatory killings,0.85,100,Global population declined by ∼30% in the last 15 years,Protecting and restoring wetlands is the most critical step. Control pollution and use community engagement/education to reduce conflict.
+Malabar Large-spotted Civet,Viverra civettina,Critically Endangered,Severe Habitat Loss and Fragmentation,0.95,40,"Possibly extinct, no confirmed sightings since the early 1990s","Urgent action is needed: protecting remaining forest fragments, implementing conservation breeding programs, and conducting intensive surveys."
+Small Indian Civet,Viverricula indica,Least Concern,Habitat degradation and poaching,0.28,200,Wide distribution and adaptability,Focus on public awareness about the species' importance and protecting its habitats.
+Common Palm Civet,Paradoxurus hermaphroditus,Least Concern,Habitat loss and persecution (pest); illegal pet trade,0.33,200,Wide distribution and adaptability,Focus on developing coexistence strategies with local communities to mitigate conflict.
+Brown Palm Civet,Paradoxurus jerdoni,Least Concern,Habitat loss and fragmentation,0.38,200,Relatively stable population within its limited range,Conservation efforts should prioritize the protection of its specific forest habitats to prevent further fragmentation.
+Common Mongoose,Herpestes edwardsii,Least Concern,Road kills and hunting,0.15,200,Highly adaptable and widespread,Focus on public awareness to reduce persecution and road accidents.
+Ruddy Mongoose,Herpestes smithii,Least Concern,Habitat loss,0.1,200,Widespread and common,Habitat protection is crucial for this species.
+Stripe-necked Mongoose,Herpestes vitticollis,Least Concern,Habitat loss (riparian habitats),0.22,200,Widespread and common,Protecting the riverside habitats where it lives is essential for its conservation.
+Smooth-coated Otter,Lutrogale perspicillata,Vulnerable,Habitat loss and pollution of water bodies; poaching,0.77,100,Population decreasing,Protecting freshwater ecosystems from pollution and encroachment is critical. Anti-poaching efforts and community education are also vital.
+Nilgiri Marten,Martes gwatkinsii,Vulnerable,Habitat loss and fragmentation,0.76,100,Small and fragmented population,Protecting its unique montane forest habitat and establishing wildlife corridors to connect fragmented areas are essential.
+Honey Badger,Mellivora capensis,Least Concern,Habitat loss and persecution (HWC),0.37,200,Wide adaptability,Community education is crucial to reduce conflict and promote coexistence with this species.
+Brown Mongoose,Herpestes fuscus,Least Concern,Habitat loss and fragmentation,0.29,200,Widespread and common,Conservation efforts should focus on the protection of its specific montane forest habitat.
+Asiatic Elephant,Elephas maximus,Endangered,"Habitat loss, fragmentation, and human-elephant conflict",0.91,60,Declining due to human encroachment and high conflict rates,"Secure and restore habitats, establish wildlife corridors, and mitigate human-elephant conflict through community engagement."
+Gaur (Indian Bison),Bos gaurus,Vulnerable,Habitat loss and fragmentation; poaching,0.74,100,Population decreasing,Conservation efforts should focus on habitat protection and anti-poaching measures.
+Sambar Deer,Rusa unicolor,Vulnerable,Habitat loss and degradation; poaching,0.73,100,Population decreasing,Habitat protection and strict anti-poaching laws are vital.
+Spotted Deer (Chital),Axis axis,Least Concern,Habitat loss and poaching,0.18,200,Species is stable,Continued habitat protection is needed to ensure the species' long-term stability.
+Indian Muntjac,Muntiacus muntjak,Least Concern,Habitat loss and hunting,0.21,200,Widespread across India and Southeast Asia,Habitat protection and community-based conservation.
+Wild Boar,Sus scrofa,Least Concern,Persecution (pest) by farmers,0.1,200,Highly adaptable and widespread,"No specific conservation measures are required, but management of human-wildlife conflict is needed."
+Four-horned Antelope,Tetracerus quadricornis,Vulnerable,Habitat loss and fragmentation; hunting,0.72,100,Population decreasing,Protecting its specific habitat and strict enforcement of anti-poaching laws.
+Blackbuck,Antilope cervicapra,Least Concern,Habitat loss and hunting (historical),0.12,200,Population has recovered,Continued habitat protection is vital to prevent future decline.
+Indian Chevrotain,Moschiola indica,Least Concern,Habitat loss and hunting,0.23,200,Widespread and common,Protecting its forest habitat is essential.
+Indian Gazelle (Chinkara),Gazella bennettii,Least Concern,Habitat loss and hunting,0.19,200,Widespread and common,Habitat protection and anti-poaching measures.
+Malabar Giant Squirrel,Ratufa indica,Least Concern,Habitat loss and fragmentation,0.26,200,Under threat from habitat loss in certain areas,"Protecting its unique forest habitats, especially in the Western and Eastern Ghats, is crucial for its long-term survival."
+Indian Giant Flying Squirrel,Petaurista philippensis,Least Concern,"Habitat degradation, fragmentation, and hunting",0.28,200,Stable status,Conservation efforts should focus on habitat protection and community awareness to reduce hunting.
+Travancore Flying Squirrel,Petinomys fuscocapillus,Vulnerable,Habitat loss and fragmentation,0.7,100,Population decreasing,Protecting and restoring its native forest habitats are critical.
+Indian Porcupine,Hystrix indica,Least Concern,Persecution (pest); hunting,0.15,200,Not a major conservation concern globally,Education for local communities to reduce human-wildlife conflict and strict enforcement of anti-poaching laws.
+Indian Hare,Lepus nigricollis,Least Concern,Habitat loss and hunting,0.17,200,Common in the Indian subcontinent,Continued habitat protection and monitoring of hunting levels are needed to maintain its stable population.
+Three-striped Palm Squirrel,Funambulus palmarum,Least Concern,Persecution (nuisance) in urban areas,0.1,200,Common throughout India and Sri Lanka,"None are specifically required, but coexistence strategies are needed in urban settings."
+Jungle Striped Squirrel,Funambulus tristriatus,Least Concern,Habitat loss; persecution (pest),0.19,200,Stable status,Habitat protection and managing human-squirrel conflict in agricultural areas.
+House Mouse,Mus musculus,Least Concern,Pest (population control/extermination),0.05,200,Global commensal species,No conservation suggestions; efforts focus on population control and management due to its pest status.
+Little Indian Field Mouse,Mus booduga,Least Concern,Agricultural pest (control measures),0.07,200,Widespread species,None are needed; efforts focus on pest management.
+Large Bandicoot Rat,Bandicota indica,Least Concern,Persecution (pest); habitat loss,0.09,200,Widespread and common,Management efforts are primarily for pest control.
+Lesser Bandicoot Rat,Bandicota bengalensis,Least Concern,Persecution (pest) and habitat control,0.08,200,Major pest,No conservation suggestions; focus is on pest management.
+House Rat,Rattus rattus,Least Concern,Pest (damages property and spreads diseases),0.06,200,Commensal rodent found globally,Control measures are the primary focus.
+Sahyadris Forest Rat,Rattus satarae,Vulnerable,Habitat loss and fragmentation,0.69,100,Endemic to the Western Ghats,Protection of its unique montane forest habitats is essential.
+Indian Bush Rat,Golunda ellioti,Least Concern,Habitat loss,0.14,200,Widespread and common,Continued monitoring of its population and habitat protection.
+Indian Flying Fox,Pteropus giganteus,Least Concern,Habitat loss; persecution; hunting,0.39,200,Widespread and major pollinator,Focus on public awareness about their ecological role as pollinators and seed dispersers to reduce persecution.
+Lesser Mouse-tailed Bat,Rhinopoma hardwickii,Least Concern,Habitat loss and disturbance to roosting sites,0.24,200,Widespread and common,Protecting their roosting sites from human disturbance is crucial.
+Greater False Vampire,Megaderma lyra,Least Concern,Habitat loss and disturbance to its roosting sites,0.27,200,Widespread and common,Protection of their roosting sites is essential.
+Lesser False Vampire,Megaderma spasma,Least Concern,Habitat destruction and human disturbance,0.29,200,Widespread and common,Protecting their forest habitats and roosting sites from human encroachment.
+Rufous Horseshoe Bat,Rhinolophus rouxii,Least Concern,Habitat loss and illegal cave-mining,0.32,200,Widespread and common,Protecting their roosting caves and forest habitats.
+Kolar Leaf-nosed Bat,Hipposideros hypophyllus,Critically Endangered,Disturbance to its only known roosting site (mining),0.92,40,"Endemic to a single cave, steeply declining",The most urgent conservation measure is to declare the cave and its surrounding area a protected zone and stop all mining activities.
+Indian Painted Bat,Kerivoula picta,Least Concern,Habitat loss,0.3,200,Widespread and common,Protection of its forest habitats.
+Indian Pipistrelle,Pipistrellus coromandra,Least Concern,Use of pesticides in agricultural areas,0.31,200,Highly adaptable and widespread,Regulation of pesticide use and public awareness about the benefits of bats.
+Tickell's Bat,Hesperoptenus tickelli,Least Concern,Habitat loss,0.2,200,Widespread and common,Protecting its forest habitats.
+Asiatic Lesser Yellow House Bat,Scotophilus kuhlii,Least Concern,No major threats,0.05,200,Highly adaptable species,None needed.
+Wrinkle-lipped Free-tailed Bat,Chaerephon plicata,Least Concern,Disturbance to its roosting caves and pesticide use,0.34,200,Widespread and common,Protecting its roosting caves and managing pesticide use.
+Wroughton's Free-tailed Bat,Otomops wroughtoni,Critically Endangered,Habitat loss and disturbance to its few known roosting caves (mining/tourism),0.9,40,"Extremely rare, steeply declining",Urgent protection of its roosting sites and their surrounding habitats.
+Horsfield's Shrew,Crocidura horsfieldi,Least Concern,Habitat loss,0.16,200,"Widespread, adaptable, and large population",None are specifically required.
+House Shrew,Suncus murinus,Least Concern,Nuisance to humans (control measures),0.05,200,One of the most widespread shrew species in the world,No specific conservation efforts are required.
+Pygmy-toothed Shrew,Suncus etruscus,Least Concern,Habitat loss,0.11,200,One of the smallest mammals in the world,Protecting its natural habitats is important.
+Hill Shrew,Suncus montanus,Least Concern,Habitat loss and fragmentation,0.25,200,Widespread and common,Protection of its specific montane forest habitat is crucial.
+Day's Shrew,Suncus dayi,Endangered,Habitat loss and fragmentation,0.79,60,Small and declining population,Urgent protection of its limited forest habitat is needed.
+Madras Hedgehog,Hemiechinus nudiventris,Least Concern,Habitat loss and poaching,0.18,200,Endemic to southern India,Public awareness and habitat protection are important to mitigate threats.
+Indian Pangolin,Manis crassicaudata,Endangered,Illegal poaching for the wildlife trade,0.95,60,Rapidly decreasing trend due to heavy poaching,"Urgent and strict anti-poaching measures, international collaboration to stop the illegal trade, and public awareness campaigns."
+Common Indian Toad,Duttaphrynus melanostictus,Least Concern,Human persecution; pollution and road kills,0.09,200,One of the most widespread and common toad species in Asia,No specific conservation efforts are required.
+Beddome's Toad,Duttaphrynus beddomii,Vulnerable,Habitat loss and fragmentation,0.68,100,Population is decreasing,Protecting and restoring its native forest habitats are critical.
+Ornate Warty Frog,Ghatophryne ornata,Vulnerable,Habitat loss and fragmentation,0.67,100,Population decreasing,Protecting its specific forest and stream habitats is essential.
+Rubiginous Warty Frog,Ghatophryne rubigina,Vulnerable,Habitat loss,0.66,100,Population decreasing,Protecting its native forest habitats is crucial.
+Malabar Tree Toad,Pedostibes tuberculosus,Vulnerable,Habitat loss and fragmentation,0.65,100,Population decreasing,Protecting and restoring its forest habitats are vital for its survival.
+Koyna Toad,Xanthophryne koynayensis,Endangered,Habitat loss,0.81,60,Population decreasing,Urgent protection of its limited habitat is needed.
+Indian Skittering Frog,Euphlyctis cyanophlyctis,Least Concern,Pollution of water bodies and habitat degradation,0.15,200,Widespread and highly adaptable,"None are specifically required, but maintaining healthy freshwater ecosystems is important."
+Indian Pond Frog,Euphlyctis hexadactylus,Least Concern,Habitat loss (draining of wetlands) and pollution,0.2,200,Widespread and common,Protecting and restoring wetland habitats are crucial for this species.
+Jerdon's Bullfrog,Hoplobatrachus crassus,Least Concern,Hunting for its meat,0.1,200,Widespread and common,None are specifically required.
+Indian Bullfrog,Hoplobatrachus tigerinus,Least Concern,Hunting for its legs,0.13,200,Widespread and common,Monitoring hunting pressure is important to ensure its population remains stable.
+Rufous Frog,Minervarya rufescens,Least Concern,Habitat loss,0.17,200,Widespread and common,Protection of its native forest habitat is important.
+Bengaluru Burrowing Frog,Sphaerotheca Bengaluru,Data Deficient,Habitat loss due to rapid urbanization,0.35,200,Not enough is known,Further research is needed to determine its conservation status and to implement protection measures.
+Monsoon Burrowing Frog,Sphaerotheca varshaabhu,Data Deficient,Habitat loss due to expansion and urbanization,0.3,200,Not enough is known,More research is needed to understand its population and range.
+Indian Burrowing Frog,Sphaerotheca breviceps,Least Concern,No major threats,0.05,200,Widespread and adaptable,None are needed.
+Dobson's Burrowing Frog,Sphaerotheca dobsonii,Data Deficient,Habitat loss is a potential threat,0.25,200,Not enough is known,More research is needed to assess its conservation status.
+Kerala Frog,Fejervarya keralensis,Least Concern,Habitat loss and water pollution,0.18,200,Widespread and common,Protecting its forest and aquatic habitats is important.
+Kudremukh Frog,Fejervarya kudremukhensis,Endangered,Habitat loss,0.8,60,Population decreasing,The protection of the Kudremukh National Park is crucial for this species' survival.
+Mysore Frog,Fejervarya mysorensis,Vulnerable,Habitat loss,0.64,100,Population decreasing,Protecting its forest habitat is crucial.
+Karnataka Caecilian,Gegeneophis carnosus,Least Concern,Habitat loss,0.15,200,Widespread and common,Protecting its native forest habitats is important.
+Beddome's Caecilian,Ichthyophis beddomei,Least Concern,Habitat loss,0.16,200,Widespread and common,Protecting its forest habitats is crucial.
+Bombay Caecilian,Ichthyophis bombayensis,Least Concern,Habitat loss,0.17,200,Widespread and common,Protecting its native forest habitats is important.
+Narayan's Caecilian,Uraeotyphlus narayani,Least Concern,Habitat loss,0.15,200,Widespread and common,Protecting its forest habitats.
+Madhav's Caecilian,Gegeneophis madhavai,Vulnerable,Habitat loss and fragmentation,0.63,100,Population decreasing,Protecting its forest habitats from human encroachment.
+Marsh Crocodile,Mugger Crocodile,Vulnerable,"Habitat loss, accidental drowning, and persecution",0.71,100,Population increasing due to conservation efforts,"Protecting and restoring wetland habitats, promoting community awareness to reduce human-crocodilian conflict, and implementing stricter laws against illegal killing."
+Prashad's Dwarf Gecko,Hemidactylus prashadi,Vulnerable,Habitat loss and fragmentation,0.62,100,Population decreasing,Protecting its native forest habitats from human encroachment.
+White-striped Gecko,Geckoella albofasciata,Vulnerable,Habitat loss,0.61,100,Population decreasing,Protecting its forest habitats is crucial.
+Heteropholis Day Gecko,Cnemaspis heteropholis,Least Concern,Localized threats from habitat loss,0.15,200,Generally stable,Protecting its native forest and rocky habitats.
+Southern Flying Lizard,Draco dussumieri,Least Concern,Habitat loss,0.18,200,Widespread and common,Protecting its forest habitats.
+Peninsular Rock Agama,Psammophilus dorsalis,Least Concern,No major threats,0.05,200,Widespread and common,None are specifically needed.
+Large-scaled Forest Lizard,Calotes grandisquamis,Vulnerable,Habitat loss and fragmentation,0.6,100,Population decreasing,Protecting its forest habitats.
+Indian Chameleon,Chamaeleo zeylanicus,Least Concern,Hunting and capture for the illegal pet trade,0.2,200,Widespread and common,Regulation of the illegal pet trade and public awareness.
+Common Indian Monitor Lizard,Varanus bengalensis,Least Concern,Poaching for its skin; killed out of fear,0.25,200,Widespread and common,Public awareness and strict enforcement of anti-poaching laws.
+Indian Skink,Eutropis carinata,Least Concern,No major threats,0.05,200,Highly adaptable and common,None are specifically needed.
+Indian Rock Python,Python molurus,Vulnerable,Habitat loss and illegal poaching,0.7,100,Population decreasing,Protecting their habitats and enforcing anti-poaching laws.
+Red Sand Boa,Eryx johnii,Least Concern,Illegal trade (traditional medicine/luck),0.25,200,Widespread and common,Raising awareness about its harmless nature and cracking down on the illegal wildlife trade.
+Common Sand Boa,Gongylophis conicus,Least Concern,Poaching for illegal pet trade and traditional medicine,0.22,200,Widespread and common,Public education and enforcement of anti-poaching laws.
+Oriental Rat Snake,Ptyas mucosa,Least Concern,Habitat loss and persecution by humans,0.15,200,Highly adaptable and widespread,Public awareness about its harmless and beneficial role in controlling rodent populations.
+Common Bronzeback Tree Snake,Dendrelaphis tristis,Least Concern,Habitat loss,0.1,200,Widespread and common,Protecting its forest and tree habitats.
+Checkered Keelback,Fowlea piscator,Least Concern,Water pollution and habitat loss,0.2,200,Widespread and common,Protecting freshwater ecosystems from pollution.
+Common Wolf Snake,Lycodon aulicus,Least Concern,No major threats,0.05,200,Common and adaptable species,None are specifically needed.
+Common Trinket Snake,Coelognathus helena,Least Concern,Habitat loss,0.1,200,Widespread and common,Protecting its natural habitats.
+Spectacled Cobra,Naja naja,Vulnerable,"Habitat loss, persecution, and poaching",0.75,100,Population decreasing,"Public education to reduce human-snake conflict, and strict anti-poaching laws."
+King Cobra,Ophiophagus hannah,Vulnerable,Habitat loss and illegal poaching,0.76,100,Population decreasing,Protection of its forest habitats.
+Common Krait,Bungarus caeruleus,Least Concern,Persecution by humans,0.1,200,Widespread and common,Public awareness about its nocturnal nature and avoiding contact with it.
+Russell's Viper,Daboia russelii,Least Concern,Persecution by humans,0.08,200,Widespread and common,Public awareness about snakebite prevention and the use of anti-venom.
+Saw-scaled Viper,Echis carinatus,Least Concern,Persecution by humans,0.07,200,Widespread and common,Public awareness about its behavior and snakebite prevention.
+Malabar Pit Viper,Craspedocephalus malabaricus,Least Concern,Habitat loss,0.18,200,Widespread and common,Protecting its native forest habitats.
+Bamboo Pit Viper,Trimeresurus gramineus,Least Concern,Habitat loss,0.17,200,Widespread and common,Protecting its forest habitats.
+Jerdon's Shield-tail Snake,Uropeltis jerdoni,Vulnerable,Habitat loss and fragmentation,0.6,100,Population decreasing,Protecting its limited forest habitats.

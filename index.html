@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRAVAH - AI Meets Conservation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-green: #2d8659;
+            --secondary-green: #3d9970;
+            --light-green: #6ec99d;
+            --mint-green: #a8e6cf;
+            --forest-green: #1b5e42;
+            --bg-white: #ffffff;
+            --text-dark: #2c3e50;
+            --text-light: #5a6c7d;
+            --accent-green: #52c093;
+        }
+
+        [data-theme="dark"] {
+            --primary-green: #3d9970;
+            --secondary-green: #52c093;
+            --light-green: #6ec99d;
+            --mint-green: #a8e6cf;
+            --forest-green: #1b5e42;
+            --bg-white: #0a1f14;
+            --text-dark: #e8f5e9;
+            --text-light: #b9d4c7;
+            --accent-green: #6ec99d;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-white);
+            color: var(--text-dark);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            overflow-x: hidden;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--bg-white);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-green);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            font-size: 1.8rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-green);
+        }
+
+        /* Dark Mode Toggle */
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+            background: var(--text-light);
+            border-radius: 30px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .toggle-switch.active {
+            background: var(--primary-green);
+        }
+
+        .toggle-slider {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+
+        .toggle-switch.active .toggle-slider {
+            transform: translateX(24px);
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 70px;
+            min-height: 100vh; /* full screen height */
+            width: 100%;
+            max-width: none; /* override section max-width */
+            margin-left: 0; /* ensure full-bleed */
+            margin-right: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(1200px 600px at 85% 20%, rgba(110, 201, 157, 0.25), transparent 60%),
+                        linear-gradient(135deg, var(--mint-green) 0%, var(--bg-white) 100%);
+            position: relative;
+            overflow: hidden;
+            padding: 6rem 0 4rem; /* add breathing space */
+        }
+
+        [data-theme="dark"] .hero {
+            background: linear-gradient(135deg, rgba(45, 134, 89, 0.2) 0%, var(--bg-white) 100%);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: var(--light-green);
+            opacity: 0.1;
+            border-radius: 50%;
+            top: -200px;
+            right: -200px;
+            z-index: 0;
+        }
+
+        /* Decorative wave at the bottom */
+        .hero::after {
+            content: '';
+            position: absolute;
+            left: 0; right: 0; bottom: -1px; height: 120px;
+            background: url("data:image/svg+xml,%3Csvg width='1440' height='120' viewBox='0 0 1440 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 44c120 34 240 50 360 50s240-16 360-50 240-50 360-50 240 16 360 50v76H0V44z' fill='%23ffffff'/%3E%3C/svg%3E") no-repeat center / cover;
+            z-index: 0;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            text-align: center;
+            z-index: 1;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--forest-green);
+            margin-bottom: 1rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards;
+        }
+
+        [data-theme="dark"] .hero h1 {
+            color: var(--mint-green);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.3s forwards;
+        }
+
+        .cta-group { display:flex; gap:12px; justify-content:center; align-items:center; flex-wrap:wrap; }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: var(--primary-green);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.6s forwards;
+            cursor: pointer;
+            border: none;
+        }
+
+        .cta-button:hover {
+            background: var(--forest-green);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(45, 134, 89, 0.3);
+        }
+
+        .cta-button.outline {
+            background: transparent;
+            color: var(--primary-green);
+            border: 2px solid var(--primary-green);
+        }
+
+        .cta-button.outline:hover {
+            background: rgba(45, 134, 89, 0.08);
+            box-shadow: none;
+            transform: translateY(-2px);
+        }
+
+        /* Sections */
+        section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 5rem 2rem;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-green);
+            margin-bottom: 3rem;
+        }
+
+        /* About Section */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            margin-bottom: 3rem;
+        }
+
+        .about-image {
+            width: 100%;
+            height: 400px;
+            border-radius: 20px;
+            background-image: url('https://images.unsplash.com/photo-1465101162946-4377e57745c3?q=80&w=1600&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+        }
+
+        .about-text h3 {
+            font-size: 2rem;
+            color: var(--forest-green);
+            margin-bottom: 1rem;
+        }
+
+        [data-theme="dark"] .about-text h3 {
+            color: var(--light-green);
+        }
+
+        .about-text p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+
+        .feature-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: var(--bg-white);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        [data-theme="dark"] .feature-card {
+            background: rgba(45, 134, 89, 0.1);
+            border-color: rgba(110, 201, 157, 0.2);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(45, 134, 89, 0.2);
+            border-color: var(--primary-green);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h4 {
+            font-size: 1.3rem;
+            color: var(--primary-green);
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card p {
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background: linear-gradient(135deg, var(--primary-green), var(--forest-green));
+            border-radius: 20px;
+            padding: 4rem 2rem;
+            margin: 0 2rem;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .stat-card {
+            text-align: center;
+            color: white;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: scale(1.05);
+        }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            padding: 5rem 2rem;
+            background: var(--mint-green);
+            border-radius: 20px;
+            margin: 0 2rem;
+        }
+
+        [data-theme="dark"] .cta-section {
+            background: rgba(45, 134, 89, 0.2);
+        }
+
+        .cta-section h2 {
+            font-size: 2.5rem;
+            color: var(--forest-green);
+            margin-bottom: 1rem;
+        }
+
+        [data-theme="dark"] .cta-section h2 {
+            color: var(--mint-green);
+        }
+
+        .cta-section p {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--forest-green);
+            color: white;
+            padding: 3rem 2rem 1rem;
+            margin-top: 5rem;
+        }
+
+        [data-theme="dark"] footer {
+            background: rgba(27, 94, 66, 0.5);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-links h4 {
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--mint-green);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .hero h1 { font-size: 3rem; }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 1rem;
+                font-size: 0.9rem;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-cards,
+            .stats-container,
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            section {
+                padding: 3rem 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 2.2rem; }
+            .hero p { font-size: 0.95rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <span class="logo-icon">🌿</span>
+                <span>PRAVAH</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="eco-connect.html">Eco-Connect</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li class="toggle-container">
+                    <div class="toggle-switch" id="darkModeToggle">
+                        <div class="toggle-slider"></div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>AI Meets Conservation</h1>
+            <p>Predict, Protect, and Preserve — Harnessing Artificial Intelligence to safeguard biodiversity and empower communities worldwide.</p>
+            <div class="cta-group">
+                <button class="cta-button" onclick="scrollToSection('about')">Get Started</button>
+                <a class="cta-button outline" href="dashboard.html">Explore Dashboard</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About PRAVAH Section -->
+    <section id="about">
+        <h2 class="section-title fade-in">About PRAVAH</h2>
+        <div class="about-content fade-in">
+            <div class="about-image">
+                
+            </div>
+            <div class="about-text">
+                <h3>Where AI Meets Nature</h3>
+                <p>PRAVAH is a groundbreaking platform that combines cutting-edge artificial intelligence with environmental conservation. We use advanced machine learning algorithms to predict biodiversity loss, identify critical conservation hotspots, and provide actionable insights for protecting our planet.</p>
+                <p>Our mission is to bridge the gap between technology and ecology, empowering researchers, policymakers, and communities to make data-driven decisions that preserve Earth's precious biodiversity.</p>
+            </div>
+        </div>
+
+        <div class="feature-cards">
+            <div class="feature-card fade-in">
+                <div class="feature-icon">📉</div>
+                <h4>Predict Species Decline</h4>
+                <p>Advanced AI models forecast species population trends and extinction risks with unprecedented accuracy.</p>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-icon">🗺️</div>
+                <h4>Identify Hotspots</h4>
+                <p>Pinpoint critical biodiversity areas requiring immediate conservation action using satellite data.</p>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-icon">📊</div>
+                <h4>Support Policymakers</h4>
+                <p>Provide evidence-based insights to guide conservation policies and resource allocation.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why It Matters Section -->
+    <section>
+        <h2 class="section-title fade-in">Why It Matters</h2>
+        <div class="stats-section fade-in">
+            <div class="stats-container">
+                <div class="stat-card">
+                    <span class="stat-number" data-target="73">0</span>
+                    <span class="stat-label">% wildlife decline since 1970</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" data-target="22">0</span>
+                    <span class="stat-label">% wetlands lost since 1970 (global)</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" data-target="137">0</span>
+                    <span class="stat-label">species lost daily (estimated)</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section>
+        <div class="cta-section fade-in">
+            <h2>Join the Movement</h2>
+            <p>Be Part of Eco-Connect — Where communities come together to make a real difference</p>
+            <button class="cta-button" onclick="alert('Eco-Connect community page coming soon! Upload activities, earn eco-points, and connect with fellow conservationists.')">Join Now</button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div>
+                <div class="footer-logo">
+                    <span>🌿</span>
+                    <span>PRAVAH</span>
+                </div>
+                <p>AI-powered conservation for a sustainable future. Protecting biodiversity through technology and community action.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="eco-connect.html">Eco-Connect</a></li>
+                    <li><a href="#about">About</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="#contact">Contact Us</a></li>
+                    <li><a href="#documentation">Documentation</a></li>
+                    <li><a href="#privacy">Privacy Policy</a></li>
+                    <li><a href="#terms">Terms of Service</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 PRAVAH. All rights reserved. | Built with 💚 for our planet</p>
+        </div>
+    </footer>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const html = document.documentElement;
+
+        // Check for saved theme preference
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        html.setAttribute('data-theme', currentTheme);
+        if (currentTheme === 'dark') {
+            darkModeToggle.classList.add('active');
+        }
+
+        darkModeToggle.addEventListener('click', function() {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            this.classList.toggle('active');
+        });
+
+        // Smooth Scroll Function
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // Add smooth scroll to all nav links
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href.startsWith('#')) {
+                    e.preventDefault();
+                    const sectionId = href.substring(1);
+                    scrollToSection(sectionId);
+                }
+            });
+        });
+
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(element => {
+            observer.observe(element);
+        });
+
+        // Animated Counter for Statistics
+        function animateCounter(element) {
+            const target = parseInt(element.getAttribute('data-target'));
+            const duration = 2000;
+            const increment = target / (duration / 16);
+            let current = 0;
+
+            const updateCounter = () => {
+                current += increment;
+                if (current < target) {
+                    element.textContent = Math.floor(current);
+                    requestAnimationFrame(updateCounter);
+                } else {
+                    element.textContent = target;
+                }
+            };
+
+            updateCounter();
+        }
+
+        // Trigger counter animation when stats section is visible
+        const statsObserver = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    document.querySelectorAll('.stat-number').forEach(counter => {
+                        animateCounter(counter);
+                    });
+                    statsObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        const statsSection = document.querySelector('.stats-section');
+        if (statsSection) {
+            statsObserver.observe(statsSection);
+        }
+
+        // Navbar shadow on scroll
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.1)';
+            } else {
+                navbar.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.05)';
+            }
+        });
+    </script>
+</body>
+</html>
