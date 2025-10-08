@@ -38,6 +38,8 @@
         .nav-right { display:flex; align-items:center; gap:12px; }
 
         .filters { display:grid; grid-template-columns: 1fr 1fr 1.2fr auto; gap:16px; margin-top:20px; }
+        .field { display:flex; flex-direction:column; gap:6px; }
+        .field label { font-size:12px; color:var(--muted); font-weight:600; }
         .input, .select { width:100%; padding:12px 14px; border:1px solid var(--border); border-radius:10px; background:var(--card); color:var(--text); outline:none; }
         .btn-primary { background:var(--primary); color:#fff; border:none; padding:12px 18px; border-radius:10px; cursor:pointer; font-weight:600; }
         .btn-primary:hover { background:var(--primary-dark); }
@@ -115,14 +117,23 @@
     <div class="container">
 
         <div class="filters">
-            <select class="select" id="stateSelect"></select>
-            <select class="select" id="categorySelect">
-                <option value="wildlife">Wildlife</option>
-                <option value="aquatic">Aquatic</option>
-            </select>
-            <select class="select" id="speciesSelect">
-                <option value="random">Random Species</option>
-            </select>
+            <div class="field">
+                <label for="stateSelect">Select State</label>
+                <select class="select" id="stateSelect"></select>
+            </div>
+            <div class="field">
+                <label for="categorySelect">Vegetation</label>
+                <select class="select" id="categorySelect">
+                    <option value="wildlife">Wildlife</option>
+                    <option value="aquatic">Aquatic</option>
+                </select>
+            </div>
+            <div class="field">
+                <label for="speciesSelect">Species</label>
+                <select class="select" id="speciesSelect">
+                    <option value="random">Random Species</option>
+                </select>
+            </div>
             <button class="btn-primary" id="analyzeBtn" disabled>Analyze Species Threat</button>
         </div>
 
