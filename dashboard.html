@@ -60,7 +60,7 @@
         .progress { height:8px; background:var(--subtle); border-radius:999px; overflow:hidden; width:120px; margin-left:8px; }
         .progress > span { display:block; height:100%; background:var(--primary); }
         .chart-wrap { height:320px; border-radius:10px; border:1px dashed var(--border); display:flex; align-items:center; justify-content:center; padding:10px; position: relative; }
-        .chart-wrap canvas { max-width: 100%; max-height: 100%; }
+        .chart-wrap canvas { max-width: 100%; max-height: 100%; width: 100% !important; height: 100% !important; }
         .two-col { display:grid; grid-template-columns: 1.7fr 1fr; gap:20px; margin-top:20px; }
         .list { padding-left:18px; }
         .list li { margin:8px 0; }
@@ -142,7 +142,7 @@
             <div class="card">
                 <div class="section-title">Actionable Dashboard</div>
                 <div class="hero-card">
-                    <img class="hero-img" id="heroImg" src="https://images.unsplash.com/photo-1544551763-7ef42063f34f?q=80&w=800&auto=format&fit=crop" alt="species" onerror="this.src='https://via.placeholder.com/400x240/2d8659/ffffff?text=Species+Image'" />
+                    <img class="hero-img" id="heroImg" src="https://images.unsplash.com/photo-1544551763-7ef42063f34f?q=80&w=800&auto=format&fit=crop" alt="species" />
                     <div>
                         <div style="font-weight:700; color:var(--primary); margin-bottom:6px;" id="speciesCommon">—</div>
                         <div class="years" id="yearsValue">—</div>
@@ -193,7 +193,6 @@
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.umd.min.js"></script>
     <script>
         // THEME: shared with home page via localStorage 'theme'
         (function(){
@@ -301,19 +300,28 @@
         }
 
         function renderDetails(item){
-            document.getElementById('yearsValue').textContent = item.years + ' YEARS';
-            document.getElementById('dominantThreat').textContent = 'Dominant Threat: ' + (item.threat||'-');
-            document.getElementById('suggestion').textContent = item.suggestion || '-';
-            document.getElementById('corrValue').textContent = item.correlation.toFixed(2);
-            document.getElementById('sciName').textContent = item.scientific || '-';
-            document.getElementById('speciesCommon').textContent = item.common || '—';
-            document.getElementById('status').textContent = item.status || '—';
+            const yearsEl = document.getElementById('yearsValue');
+            const threatEl = document.getElementById('dominantThreat');
+            const suggestionEl = document.getElementById('suggestion');
+            const corrEl = document.getElementById('corrValue');
+            const sciEl = document.getElementById('sciName');
+            const commonEl = document.getElementById('speciesCommon');
+            const statusEl = document.getElementById('status');
+            const contribBarEl = document.getElementById('contribBar');
+            const contribNumEl = document.getElementById('contribNum');
+            
+            if (yearsEl) yearsEl.textContent = item.years + ' YEARS';
+            if (threatEl) threatEl.textContent = 'Dominant Threat: ' + (item.threat||'-');
+            if (suggestionEl) suggestionEl.textContent = item.suggestion || '-';
+            if (corrEl) corrEl.textContent = item.correlation.toFixed(2);
+            if (sciEl) sciEl.textContent = item.scientific || '-';
+            if (commonEl) commonEl.textContent = item.common || '—';
+            if (statusEl) statusEl.textContent = item.status || '—';
+            
             const pct = Math.max(5, Math.min(100, Math.round((item.correlation||0.5)*100)));
-            document.getElementById('contribBar').style.width = pct + '%';
-            document.getElementById('contribNum').textContent = pct.toFixed(1) + '%';
-            const actions = (item.suggestion||'').split('. ').filter(Boolean).slice(0,3);
-            const ul = document.getElementById('actionList');
-            ul.innerHTML = (actions.length?actions:['—']).map(a=>`<li>${a.replace(/\.$/,'')}</li>`).join('');
+            if (contribBarEl) contribBarEl.style.width = pct + '%';
+            if (contribNumEl) contribNumEl.textContent = pct.toFixed(1) + '%';
+            
             setSpeciesImage(item);
         }
 
@@ -336,39 +344,90 @@
 
         function renderChart(labels, values){
             const canvas = document.getElementById('trendChart');
-            if (!canvas) return;
+            if (!canvas) {
+                console.error('trendChart canvas not found');
+                return;
+            }
+            console.log('Rendering line chart with', labels.length, 'data points');
             const ctx = canvas.getContext('2d');
             const dark = document.documentElement.getAttribute('data-theme')==='dark';
             const grid = dark ? 'rgba(185,212,199,0.12)' : 'rgba(0,0,0,0.06)';
             const text = dark ? '#b9d4c7' : '#5a6c7d';
-            const border = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim();
+            const border = dark ? '#6ec99d' : '#2d8659';
             const gradient = ctx.createLinearGradient(0,0,0,280);
             gradient.addColorStop(0, dark ? 'rgba(110,201,157,0.35)' : 'rgba(82,192,147,0.35)');
             gradient.addColorStop(1, dark ? 'rgba(27,94,66,0.05)' : 'rgba(82,192,147,0.05)');
+            
             if (window._trendChart) window._trendChart.destroy();
-            window._trendChart = new Chart(ctx, {
-                type:'line',
-                data:{ labels, datasets:[{ label:'Population Count', data: values, borderColor: border, borderWidth:3, pointRadius:2, pointHoverRadius:5, pointHitRadius:10, backgroundColor: gradient, tension:0.35, fill:true }]},
-                options:{
-                    responsive:true, maintainAspectRatio:false,
-                    interaction:{ mode:'index', intersect:false },
-                    scales:{ x:{ grid:{ color:grid }, ticks:{ color:text }, title:{ display:true, text:'Year', color:text, font:{ weight:'600' } } }, y:{ min:0, grid:{ color:grid, borderDash:[4,4] }, ticks:{ color:text, callback:v=>v.toLocaleString() }, title:{ display:true, text:'Population Count', color:text, font:{ weight:'600' } } } },
-                    plugins:{ legend:{ labels:{ color:text } }, tooltip:{ backgroundColor: dark?'rgba(20,40,32,0.9)':'rgba(255,255,255,0.95)', titleColor: dark?'#e8f5e9':'#1f2b2a', bodyColor: dark?'#b9d4c7':'#2c3e50', borderColor: grid, borderWidth:1, callbacks:{ label:(ctx)=>` ${ctx.parsed.y.toLocaleString()} individuals` } }, zoom:{ pan:{ enabled:true, mode:'xy' }, zoom:{ wheel:{ enabled:true }, pinch:{ enabled:true }, mode:'xy' } } }
-                }
-            });
+            
+            try {
+                window._trendChart = new Chart(ctx, {
+                    type:'line',
+                    data:{ 
+                        labels, 
+                        datasets:[{ 
+                            label:'Population Count', 
+                            data: values, 
+                            borderColor: border, 
+                            borderWidth:3, 
+                            pointRadius:2, 
+                            pointHoverRadius:5, 
+                            pointHitRadius:10, 
+                            backgroundColor: gradient, 
+                            tension:0.35, 
+                            fill:true 
+                        }]
+                    },
+                    options:{
+                        responsive:true, 
+                        maintainAspectRatio:false,
+                        interaction:{ mode:'index', intersect:false },
+                        scales:{ 
+                            x:{ 
+                                grid:{ color:grid }, 
+                                ticks:{ color:text }, 
+                                title:{ display:true, text:'Year', color:text, font:{ weight:'600' } } 
+                            }, 
+                            y:{ 
+                                min:0, 
+                                grid:{ color:grid, borderDash:[4,4] }, 
+                                ticks:{ color:text, callback:v=>v.toLocaleString() }, 
+                                title:{ display:true, text:'Population Count', color:text, font:{ weight:'600' } } 
+                            } 
+                        },
+                        plugins:{ 
+                            legend:{ labels:{ color:text } }, 
+                            tooltip:{ 
+                                backgroundColor: dark?'rgba(20,40,32,0.9)':'rgba(255,255,255,0.95)', 
+                                titleColor: dark?'#e8f5e9':'#1f2b2a', 
+                                bodyColor: dark?'#b9d4c7':'#2c3e50', 
+                                borderColor: grid, 
+                                borderWidth:1, 
+                                callbacks:{ label:(ctx)=>` ${ctx.parsed.y.toLocaleString()} individuals` } 
+                            }, 
+                            zoom:{ 
+                                pan:{ enabled:true, mode:'xy' }, 
+                                zoom:{ wheel:{ enabled:true }, pinch:{ enabled:true }, mode:'xy' } 
+                            } 
+                        }
+                    }
+                });
+                console.log('Line chart rendered successfully');
+            } catch (error) {
+                console.error('Error rendering line chart:', error);
+            }
         }
 
         function renderPieChart(dataset){
             const canvas = document.getElementById('pieChart');
-            if (!canvas) return;
+            if (!canvas) {
+                console.error('pieChart canvas not found');
+                return;
+            }
+            console.log('Rendering pie chart with', dataset.length, 'species');
             const ctx = canvas.getContext('2d');
             const dark = document.documentElement.getAttribute('data-theme')==='dark';
             const text = dark ? '#b9d4c7' : '#5a6c7d';
-            
-            // Register datalabels plugin
-            if (typeof ChartDataLabels !== 'undefined') {
-                Chart.register(ChartDataLabels);
-            }
             
             // Count species by conservation status with more specific categories
             const statusCounts = {};
@@ -390,56 +449,50 @@
             const colors = ['#e23d3d', '#ff6b35', '#f7931e', '#8bc34a', '#4caf50', '#2196f3', '#9c27b0'];
             
             if (window._pieChart) window._pieChart.destroy();
-            window._pieChart = new Chart(ctx, {
-                type: 'pie',
-                data: {
-                    labels: labels.map(label => `${label} (${statusCounts[label]})`),
-                    datasets: [{
-                        data: data,
-                        backgroundColor: colors.slice(0, labels.length),
-                        borderWidth: 2,
-                        borderColor: dark ? '#0f2a1d' : '#ffffff'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: { 
-                                color: text, 
-                                padding: 10,
-                                usePointStyle: true,
-                                pointStyle: 'circle'
-                            }
-                        },
-                        tooltip: {
-                            backgroundColor: dark?'rgba(20,40,32,0.9)':'rgba(255,255,255,0.95)',
-                            titleColor: dark?'#e8f5e9':'#1f2b2a',
-                            bodyColor: dark?'#b9d4c7':'#2c3e50',
-                            callbacks: {
-                                label: (ctx) => {
-                                    const percentage = ((ctx.parsed / total) * 100).toFixed(1);
-                                    return `${ctx.label}: ${ctx.parsed} species (${percentage}%)`;
+            
+            try {
+                window._pieChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: labels.map(label => `${label} (${statusCounts[label]})`),
+                        datasets: [{
+                            data: data,
+                            backgroundColor: colors.slice(0, labels.length),
+                            borderWidth: 2,
+                            borderColor: dark ? '#0f2a1d' : '#ffffff'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: { 
+                                    color: text, 
+                                    padding: 10,
+                                    usePointStyle: true,
+                                    pointStyle: 'circle'
                                 }
-                            }
-                        },
-                        datalabels: {
-                            display: true,
-                            color: '#ffffff',
-                            font: {
-                                weight: 'bold',
-                                size: 12
                             },
-                            formatter: (value, ctx) => {
-                                const percentage = ((value / total) * 100).toFixed(1);
-                                return percentage > 5 ? `${percentage}%` : '';
+                            tooltip: {
+                                backgroundColor: dark?'rgba(20,40,32,0.9)':'rgba(255,255,255,0.95)',
+                                titleColor: dark?'#e8f5e9':'#1f2b2a',
+                                bodyColor: dark?'#b9d4c7':'#2c3e50',
+                                callbacks: {
+                                    label: (ctx) => {
+                                        const percentage = ((ctx.parsed / total) * 100).toFixed(1);
+                                        return `${ctx.label}: ${ctx.parsed} species (${percentage}%)`;
+                                    }
+                                }
                             }
                         }
                     }
-                }
-            });
+                });
+                console.log('Pie chart rendered successfully');
+            } catch (error) {
+                console.error('Error rendering pie chart:', error);
+            }
         }
 
         async function ensureLoaded(key){ if (!datasets[key] || datasets[key].length===0) await loadCSV(key); }
@@ -505,11 +558,9 @@
 
             renderDetails(item);
             const series = buildSeries(item.years, item.correlation||0.6, item.population||1000);
-            // Render charts with a small delay to ensure DOM is ready
-            setTimeout(() => {
-                renderChart(series.labels, series.values);
-                renderPieChart(datasets[currentDatasetKey]);
-            }, 100);
+            // Render charts immediately
+            renderChart(series.labels, series.values);
+            renderPieChart(datasets[currentDatasetKey]);
             hideOverlay();
             _firstLoad = false;
         }
@@ -526,33 +577,49 @@
         }
 
         async function getSpeciesImageUrl(item){
-            try {
-                const bySci = await wikipediaThumb(item.scientific);
-                if (bySci) return bySci;
-                const byCommon = await wikipediaThumb(item.common);
-                if (byCommon) return byCommon;
-                return 'https://source.unsplash.com/600x400/?' + encodeURIComponent(item.common || item.scientific || 'wildlife');
-            } catch (error) {
-                console.error('Error fetching image:', error);
-                return 'https://via.placeholder.com/400x240/2d8659/ffffff?text=' + encodeURIComponent(item.common || 'Species');
-            }
+            const bySci = await wikipediaThumb(item.scientific);
+            if (bySci) return bySci;
+            const byCommon = await wikipediaThumb(item.common);
+            if (byCommon) return byCommon;
+            return 'https://source.unsplash.com/600x400/?' + encodeURIComponent(item.common || item.scientific || 'wildlife');
         }
 
         async function setSpeciesImage(item){
             const img = document.getElementById('heroImg');
-            if (!img) return;
+            if (!img) {
+                console.error('heroImg element not found');
+                return;
+            }
+            console.log('Setting species image for:', item.common);
             img.classList.add('img-loading');
-            const url = await getSpeciesImageUrl(item);
-            return new Promise((resolve)=>{
-                const done = ()=>{ img.classList.remove('img-loading'); resolve(); };
-                img.onload = done; img.onerror = done; img.src = url;
-            });
+            try {
+                const url = await getSpeciesImageUrl(item);
+                console.log('Image URL:', url);
+                return new Promise((resolve)=>{
+                    const done = ()=>{ 
+                        img.classList.remove('img-loading'); 
+                        console.log('Image loaded successfully');
+                        resolve(); 
+                    };
+                    img.onload = done; 
+                    img.onerror = (e) => {
+                        console.error('Image failed to load:', e);
+                        done();
+                    }; 
+                    img.src = url;
+                });
+            } catch (error) {
+                console.error('Error getting species image:', error);
+                img.classList.remove('img-loading');
+            }
         }
 
         // initial load
         (async function init(){
             try {
+                console.log('Initializing dashboard...');
                 await Promise.all([ensureLoaded('aquatic'), ensureLoaded('wildlife')]);
+                console.log('Data loaded:', { aquatic: datasets.aquatic?.length, wildlife: datasets.wildlife?.length });
                 populateStates();
                 document.getElementById('categorySelect').value = 'wildlife';
                 await onSelectionChange();
@@ -561,6 +628,7 @@
                 document.getElementById('categorySelect').addEventListener('change', onSelectionChange);
                 // Only analyze on explicit button click
                 document.getElementById('analyzeBtn').addEventListener('click', function(){ analyze(true); });
+                console.log('Dashboard initialized successfully');
             } catch (error) {
                 console.error('Error initializing dashboard:', error);
             }
