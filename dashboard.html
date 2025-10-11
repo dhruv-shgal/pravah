@@ -157,14 +157,18 @@
             <div class="card">
                 <div class="section-title">Species Details</div>
                 <div class="stats">
-                    <div class="stat-row"><span>Correlation Value</span><strong id="corrValue">—</strong></div>
                     <div class="stat-row"><span>Scientific Name</span><strong id="sciName">—</strong></div>
+                    <div class="stat-row"><span>Dominant Factor</span><strong id="dominantFactor">—</strong></div>
                     <div class="stat-row" style="gap:8px;">
-                        <span>Percent Contribution</span>
+                        <span>Dominant Factor Percentage Contribution</span>
                         <div class="progress"><span id="contribBar" style="width:0%"></span></div>
                         <strong id="contribNum">—</strong>
                     </div>
                     <div class="stat-row"><span>Current Status</span><strong id="status">—</strong></div>
+                    <div class="stat-row" style="flex-direction: column; align-items: flex-start; gap: 4px;">
+                        <span>Interesting Fact</span>
+                        <div style="font-size: 13px; color: var(--muted); line-height: 1.4;" id="speciesFact">—</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -271,7 +275,11 @@
                 suggestion: row['Conservation_Suggestion'],
                 correlation: parseFloat(row['Correlation_Value']||'0') || 0,
                 years: parseInt(row['Years_Max']||'80') || 80,
-                population: parseInt(row['N_Current_Pop_Size']||'1000') || 1000
+                population: parseInt(row['N_Current_Pop_Size']||'1000') || 1000,
+                fragmentation: parseFloat(row['Threat_Score_Fragmentation']||'0') || 0,
+                poaching: parseFloat(row['Threat_Score_Poaching']||'0') || 0,
+                conflict: parseFloat(row['Threat_Score_Conflict']||'0') || 0,
+                harvest: parseFloat(row['Poaching_Harvest_Rate']||'0') || 0
             };
         }
 
@@ -299,28 +307,185 @@
                 datasets[key].slice(0,300).map((r,i)=>`<option value="${i}">${r.common}</option>`).join('');
         }
 
+        function getExtinctionRange(years) {
+            if (years <= 60) {
+                return '50-60 YEARS';
+            } else if (years <= 70) {
+                return '60-70 YEARS';
+            } else if (years <= 80) {
+                return '70-80 YEARS';
+            } else if (years <= 90) {
+                return '80-90 YEARS';
+            } else if (years <= 100) {
+                return '90-100 YEARS';
+            } else if (years <= 110) {
+                return '100-110 YEARS';
+            } else if (years <= 120) {
+                return '110-120 YEARS';
+            } else if (years <= 130) {
+                return '120-130 YEARS';
+            } else if (years <= 140) {
+                return '130-140 YEARS';
+            } else if (years <= 150) {
+                return '140-150 YEARS';
+            } else if (years <= 160) {
+                return '150-160 YEARS';
+            } else if (years <= 170) {
+                return '160-170 YEARS';
+            } else if (years <= 180) {
+                return '170-180 YEARS';
+            } else if (years <= 190) {
+                return '180-190 YEARS';
+            } else if (years <= 200) {
+                return '190-200 YEARS';
+            } else {
+                return '200+ YEARS';
+            }
+        }
+
+        async function getSpeciesFact(speciesName) {
+            console.log('Getting fact for species:', speciesName);
+            
+            const facts = {
+                // Wildlife facts - exact matches
+                'Lion-tailed Macaque': 'These primates are known for their distinctive mane-like tuft of hair around their face, giving them a lion-like appearance. They are one of the most endangered primates in India.',
+                'Bonnet Macaque': 'Named for the cap-like tuft of hair on their heads, these monkeys are highly adaptable and often seen in urban areas across South India.',
+                'Nilgiri Langur': 'These langurs are endemic to the Western Ghats and are known for their striking black and silver fur. They play a crucial role in seed dispersal.',
+                'Tufted Grey Langur': 'Also known as the Hanuman Langur, they are considered sacred in Hindu mythology and are often found near temples.',
+                'Bengal Tiger': 'The national animal of India, these magnificent cats can swim and are known to travel long distances in search of territory.',
+                'Indian Elephant': 'These gentle giants have the largest brain of any land animal and are known for their complex social structures and memory.',
+                'Leopard': 'These elusive big cats are excellent climbers and can carry prey twice their body weight up trees.',
+                'Sloth Bear': 'Despite their name, sloth bears are actually quite fast runners and are the only bears that carry their young on their backs.',
+                'Indian Rhinoceros': 'Also called the Greater One-horned Rhinoceros, they have a single horn and are excellent swimmers.',
+                'Wild Boar': 'These omnivores have an incredible sense of smell and can run up to 30 mph when threatened.',
+                
+                // Aquatic facts - exact matches
+                'Ganges River Dolphin': 'These blind dolphins use echolocation to navigate and are considered the national aquatic animal of India.',
+                'Mugger Crocodile': 'These crocodiles can live up to 50 years and are known for their ability to survive in both fresh and saltwater.',
+                'Indian Flapshell Turtle': 'These turtles can retract their heads completely into their shells and are excellent swimmers.',
+                'Giant Freshwater Prawn': 'One of the largest freshwater prawns in the world, they can grow up to 30 cm in length.',
+                'Indian Major Carp': 'These fish are known for their rapid growth and are important in aquaculture across India.',
+                'Hilsa Fish': 'Considered the "king of fish" in Bengal, Hilsa is known for its unique taste and cultural significance.',
+                'Mahseer': 'Known as the "tiger of the water," these fish are highly prized by anglers and can grow up to 2 meters in length.',
+                'Gharial': 'These crocodilians have the longest snout of any crocodile species and are critically endangered.',
+                'Indian Softshell Turtle': 'These turtles can breathe through their skin and are known for their soft, leathery shells.',
+                'Gangetic Shark': 'Despite being called a shark, this species is actually a type of catfish and is endemic to the Ganges River system.',
+                
+                // Additional species with unique facts
+                'South-western Langur': 'These langurs are endemic to the Western Ghats and are known for their distinctive black and silver fur. They are excellent seed dispersers.',
+                'Common Langur': 'These langurs are highly social animals that live in troops and are known for their loud alarm calls that warn other animals of danger.',
+                'Rhesus Macaque': 'These monkeys are highly intelligent and have been used extensively in medical research. They are also excellent swimmers.',
+                'Assam Macaque': 'These macaques are found in the northeastern regions of India and are known for their distinctive cheek pouches.',
+                'Golden Langur': 'These langurs are critically endangered and are known for their striking golden fur. They are found only in a small region of Assam.',
+                'Hoolock Gibbon': 'These are the only apes found in India and are known for their loud, melodious calls that can be heard from miles away.',
+                'Indian Pangolin': 'These scaly mammals are the most trafficked animals in the world due to their scales being used in traditional medicine.',
+                'Indian Giant Squirrel': 'These squirrels are among the largest in the world and are known for their vibrant, multi-colored fur.',
+                'Malabar Giant Squirrel': 'These squirrels are endemic to the Western Ghats and are known for their ability to glide between trees.',
+                'Indian Flying Fox': 'These are the largest bats in India and play a crucial role in pollination and seed dispersal.',
+                
+                // Aquatic species with unique facts
+                'Indian Mackerel': 'These fish are known for their distinctive blue-green stripes and are an important commercial fish species.',
+                'Pomfret': 'These flatfish are highly prized for their delicate flavor and are often called the "chicken of the sea."',
+                'Catla': 'These carp are known for their large size and are one of the most important fish in Indian aquaculture.',
+                'Rohu': 'These fish are known for their rapid growth and are widely farmed across India for their nutritional value.',
+                'Mrigal': 'These bottom-feeding fish are known for their ability to clean water bodies by feeding on organic matter.',
+                'Indian Catfish': 'These fish are known for their whisker-like barbels and are excellent at surviving in low-oxygen conditions.',
+                'Snakehead': 'These predatory fish can breathe air and are known for their ability to survive out of water for several days.',
+                'Tilapia': 'These fish are known for their rapid reproduction and are widely used in aquaculture worldwide.',
+                'Indian Carp': 'These fish are known for their hardiness and are important in maintaining water quality in ponds and lakes.',
+                'Freshwater Eel': 'These mysterious fish can travel thousands of kilometers to spawn and are known for their snake-like appearance.'
+            };
+            
+            // Try to find exact match first
+            if (facts[speciesName]) {
+                console.log('Found exact match for:', speciesName);
+                return facts[speciesName];
+            }
+            
+            // Try to find partial match with better logic
+            const lowerSpeciesName = speciesName.toLowerCase();
+            for (const [key, fact] of Object.entries(facts)) {
+                const lowerKey = key.toLowerCase();
+                if (lowerSpeciesName.includes(lowerKey) || lowerKey.includes(lowerSpeciesName)) {
+                    console.log('Found partial match for:', speciesName, 'matching:', key);
+                    return fact;
+                }
+            }
+            
+            // Generate unique fact based on species characteristics
+            const uniqueFacts = [
+                `The ${speciesName} plays a crucial role in maintaining ecological balance through its unique feeding habits and habitat preferences.`,
+                `This species of ${speciesName} has evolved remarkable adaptations to survive in its specific environment, making it an important indicator of ecosystem health.`,
+                `The ${speciesName} contributes significantly to biodiversity through its interactions with other species and its role in the food web.`,
+                `Known for its distinctive characteristics, the ${speciesName} is an essential component of its ecosystem and requires careful conservation efforts.`,
+                `The ${speciesName} demonstrates remarkable resilience and adaptability, making it a fascinating subject for ecological studies and conservation research.`
+            ];
+            
+            // Use species name to generate a consistent but unique fact
+            const hash = speciesName.split('').reduce((a, b) => {
+                a = ((a << 5) - a) + b.charCodeAt(0);
+                return a & a;
+            }, 0);
+            const factIndex = Math.abs(hash) % uniqueFacts.length;
+            
+            console.log('Using generated fact for:', speciesName);
+            return uniqueFacts[factIndex];
+        }
+
         function renderDetails(item){
             const yearsEl = document.getElementById('yearsValue');
             const threatEl = document.getElementById('dominantThreat');
             const suggestionEl = document.getElementById('suggestion');
-            const corrEl = document.getElementById('corrValue');
             const sciEl = document.getElementById('sciName');
             const commonEl = document.getElementById('speciesCommon');
             const statusEl = document.getElementById('status');
             const contribBarEl = document.getElementById('contribBar');
             const contribNumEl = document.getElementById('contribNum');
+            const dominantFactorEl = document.getElementById('dominantFactor');
+            const factEl = document.getElementById('speciesFact');
             
-            if (yearsEl) yearsEl.textContent = item.years + ' YEARS';
+            if (yearsEl) yearsEl.textContent = getExtinctionRange(item.years);
             if (threatEl) threatEl.textContent = 'Dominant Threat: ' + (item.threat||'-');
             if (suggestionEl) suggestionEl.textContent = item.suggestion || '-';
-            if (corrEl) corrEl.textContent = item.correlation.toFixed(2);
             if (sciEl) sciEl.textContent = item.scientific || '-';
             if (commonEl) commonEl.textContent = item.common || '—';
             if (statusEl) statusEl.textContent = item.status || '—';
             
-            const pct = Math.max(5, Math.min(100, Math.round((item.correlation||0.5)*100)));
+            // Calculate dominant factor percentage based on threat scores
+            const threatScores = {
+                fragmentation: item.fragmentation || 0,
+                poaching: item.poaching || 0,
+                conflict: item.conflict || 0,
+                harvest: item.harvest || 0
+            };
+            
+            // Find the dominant factor name
+            const factorNames = {
+                fragmentation: 'Fragmentation',
+                poaching: 'Poaching',
+                conflict: 'Conflict',
+                harvest: 'Harvest Rate'
+            };
+            
+            const maxThreat = Math.max(...Object.values(threatScores));
+            const totalThreat = Object.values(threatScores).reduce((a, b) => a + b, 0);
+            const dominantFactor = Object.keys(threatScores).find(key => threatScores[key] === maxThreat);
+            const pct = totalThreat > 0 ? Math.max(5, Math.min(100, Math.round((maxThreat / totalThreat) * 100))) : 50;
+            
             if (contribBarEl) contribBarEl.style.width = pct + '%';
             if (contribNumEl) contribNumEl.textContent = pct.toFixed(1) + '%';
+            
+            // Display the dominant factor name
+            const dominantFactorName = factorNames[dominantFactor] || 'Unknown';
+            if (dominantFactorEl) dominantFactorEl.textContent = dominantFactorName;
+            
+            // Store the dominant factor name for use in pie chart
+            item.dominantFactorName = dominantFactorName;
+            
+            // Get and display species fact
+            getSpeciesFact(item.common).then(fact => {
+                if (factEl) factEl.textContent = fact;
+            });
             
             setSpeciesImage(item);
         }
@@ -418,7 +583,7 @@
             }
         }
 
-        function renderPieChart(dataset){
+        function renderPieChart(dataset, selectedSpecies = null){
             const canvas = document.getElementById('pieChart');
             if (!canvas) {
                 console.error('pieChart canvas not found');
@@ -429,28 +594,99 @@
             const dark = document.documentElement.getAttribute('data-theme')==='dark';
             const text = dark ? '#b9d4c7' : '#5a6c7d';
             
-            // Count species by conservation status with more specific categories
-            const statusCounts = {};
-            dataset.forEach(item => {
-                let status = item.status || 'Unknown';
-                // Normalize status names for better grouping
-                if (status.toLowerCase().includes('critically endangered')) status = 'Critically Endangered';
-                else if (status.toLowerCase().includes('endangered')) status = 'Endangered';
-                else if (status.toLowerCase().includes('vulnerable')) status = 'Vulnerable';
-                else if (status.toLowerCase().includes('near threatened')) status = 'Near Threatened';
-                else if (status.toLowerCase().includes('least concern')) status = 'Least Concern';
-                else if (status.toLowerCase().includes('data deficient')) status = 'Data Deficient';
-                statusCounts[status] = (statusCounts[status] || 0) + 1;
-            });
+            // If a specific species is selected, show its threat factors
+            if (selectedSpecies && selectedSpecies.fragmentation !== undefined) {
+                const threatFactors = {
+                    'Fragmentation': selectedSpecies.fragmentation || 0,
+                    'Poaching': selectedSpecies.poaching || 0,
+                    'Conflict': selectedSpecies.conflict || 0,
+                    'Harvest Rate': selectedSpecies.harvest || 0
+                };
+                
+                const labels = Object.keys(threatFactors);
+                const data = Object.values(threatFactors);
+                const total = data.reduce((a,b) => a + b, 0);
+                const colors = ['#e23d3d', '#ff6b35', '#f7931e', '#8bc34a'];
+                
+                if (window._pieChart) window._pieChart.destroy();
+                
+                try {
+                    window._pieChart = new Chart(ctx, {
+                        type: 'pie',
+                        data: {
+                            labels: labels.map((label, index) => {
+                                const value = data[index];
+                                const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : '0.0';
+                                return `${label}: ${value.toFixed(3)} (${percentage}%)`;
+                            }),
+                            datasets: [{
+                                data: data,
+                                backgroundColor: colors.slice(0, labels.length),
+                                borderWidth: 2,
+                                borderColor: dark ? '#0f2a1d' : '#ffffff'
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'bottom',
+                                    labels: { 
+                                        color: text, 
+                                        padding: 10,
+                                        usePointStyle: true,
+                                        pointStyle: 'circle'
+                                    }
+                                },
+                                tooltip: {
+                                    backgroundColor: dark?'rgba(20,40,32,0.9)':'rgba(255,255,255,0.95)',
+                                    titleColor: dark?'#e8f5e9':'#1f2b2a',
+                                    bodyColor: dark?'#b9d4c7':'#2c3e50',
+                                    callbacks: {
+                                        label: (ctx) => {
+                                            const percentage = total > 0 ? ((ctx.parsed / total) * 100).toFixed(1) : '0.0';
+                                            return `${ctx.label}: ${ctx.parsed.toFixed(3)} (${percentage}%)`;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                    console.log('Pie chart rendered successfully with selected species threat factors');
+                    return;
+                } catch (error) {
+                    console.error('Error rendering pie chart:', error);
+                }
+            }
             
-            const labels = Object.keys(statusCounts);
-            const data = Object.values(statusCounts);
-            const total = data.reduce((a,b) => a + b, 0);
-            const colors = ['#e23d3d', '#ff6b35', '#f7931e', '#8bc34a', '#4caf50', '#2196f3', '#9c27b0'];
+            // Calculate threat factor averages for endangered species
+            const endangeredSpecies = dataset.filter(item => 
+                item.status && item.status.toLowerCase().includes('endangered')
+            );
             
-            if (window._pieChart) window._pieChart.destroy();
-            
-            try {
+            if (endangeredSpecies.length === 0) {
+                console.log('No endangered species found, showing conservation status instead');
+                // Fallback to conservation status if no endangered species
+                const statusCounts = {};
+                dataset.forEach(item => {
+                    let status = item.status || 'Unknown';
+                    if (status.toLowerCase().includes('critically endangered')) status = 'Critically Endangered';
+                    else if (status.toLowerCase().includes('endangered')) status = 'Endangered';
+                    else if (status.toLowerCase().includes('vulnerable')) status = 'Vulnerable';
+                    else if (status.toLowerCase().includes('near threatened')) status = 'Near Threatened';
+                    else if (status.toLowerCase().includes('least concern')) status = 'Least Concern';
+                    else if (status.toLowerCase().includes('data deficient')) status = 'Data Deficient';
+                    statusCounts[status] = (statusCounts[status] || 0) + 1;
+                });
+                
+                const labels = Object.keys(statusCounts);
+                const data = Object.values(statusCounts);
+                const total = data.reduce((a,b) => a + b, 0);
+                const colors = ['#e23d3d', '#ff6b35', '#f7931e', '#8bc34a', '#4caf50', '#2196f3', '#9c27b0'];
+                
+                if (window._pieChart) window._pieChart.destroy();
+                
                 window._pieChart = new Chart(ctx, {
                     type: 'pie',
                     data: {
@@ -489,7 +725,68 @@
                         }
                     }
                 });
-                console.log('Pie chart rendered successfully');
+                return;
+            }
+            
+            // Calculate average threat scores for endangered species
+            const threatFactors = {
+                'Fragmentation': endangeredSpecies.reduce((sum, item) => sum + (parseFloat(item.fragmentation) || 0), 0) / endangeredSpecies.length,
+                'Poaching': endangeredSpecies.reduce((sum, item) => sum + (parseFloat(item.poaching) || 0), 0) / endangeredSpecies.length,
+                'Conflict': endangeredSpecies.reduce((sum, item) => sum + (parseFloat(item.conflict) || 0), 0) / endangeredSpecies.length,
+                'Harvest Rate': endangeredSpecies.reduce((sum, item) => sum + (parseFloat(item.harvest) || 0), 0) / endangeredSpecies.length
+            };
+            
+            const labels = Object.keys(threatFactors);
+            const data = Object.values(threatFactors);
+            const total = data.reduce((a,b) => a + b, 0);
+            const colors = ['#e23d3d', '#ff6b35', '#f7931e', '#8bc34a'];
+            
+            if (window._pieChart) window._pieChart.destroy();
+            
+            try {
+                window._pieChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: labels.map((label, index) => {
+                            const value = data[index];
+                            const percentage = ((value / total) * 100).toFixed(1);
+                            return `${label}: ${value.toFixed(3)} (${percentage}%)`;
+                        }),
+                        datasets: [{
+                            data: data,
+                            backgroundColor: colors.slice(0, labels.length),
+                            borderWidth: 2,
+                            borderColor: dark ? '#0f2a1d' : '#ffffff'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: { 
+                                    color: text, 
+                                    padding: 10,
+                                    usePointStyle: true,
+                                    pointStyle: 'circle'
+                                }
+                            },
+                            tooltip: {
+                                backgroundColor: dark?'rgba(20,40,32,0.9)':'rgba(255,255,255,0.95)',
+                                titleColor: dark?'#e8f5e9':'#1f2b2a',
+                                bodyColor: dark?'#b9d4c7':'#2c3e50',
+                                callbacks: {
+                                    label: (ctx) => {
+                                        const percentage = ((ctx.parsed / total) * 100).toFixed(1);
+                                        return `${ctx.label}: ${ctx.parsed.toFixed(3)} (${percentage}%)`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+                console.log('Pie chart rendered successfully with threat factors');
             } catch (error) {
                 console.error('Error rendering pie chart:', error);
             }
@@ -560,7 +857,7 @@
             const series = buildSeries(item.years, item.correlation||0.6, item.population||1000);
             // Render charts immediately
             renderChart(series.labels, series.values);
-            renderPieChart(datasets[currentDatasetKey]);
+            renderPieChart(datasets[currentDatasetKey], item);
             hideOverlay();
             _firstLoad = false;
         }
@@ -623,6 +920,11 @@
                 populateStates();
                 document.getElementById('categorySelect').value = 'wildlife';
                 await onSelectionChange();
+                
+                // Show a random species on startup
+                console.log('Loading random species on startup...');
+                await analyze(false); // Load without showing loading screen
+                
                 // Do not auto-analyze on first load; wait for user click
                 document.getElementById('stateSelect').addEventListener('change', onSelectionChange);
                 document.getElementById('categorySelect').addEventListener('change', onSelectionChange);
