@@ -61,6 +61,26 @@
         .progress > span { display:block; height:100%; background:var(--primary); }
         .chart-wrap { height:320px; border-radius:10px; border:1px dashed var(--border); display:flex; align-items:center; justify-content:center; padding:10px; position: relative; }
         .chart-wrap canvas { max-width: 100%; max-height: 100%; width: 100% !important; height: 100% !important; }
+        
+        /* Fact loading spinner animation */
+        .fact-spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid #e0e0e0;
+            border-top: 2px solid #4CAF50;
+            border-radius: 50%;
+            animation: fact-spin 1s linear infinite;
+        }
+        
+        @keyframes fact-spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        [data-theme="dark"] .fact-spinner {
+            border: 2px solid #404040;
+            border-top: 2px solid #66BB6A;
+        }
         .two-col { display:grid; grid-template-columns: 1.7fr 1fr; gap:20px; margin-top:20px; }
         .list { padding-left:18px; }
         .list li { margin:8px 0; }
@@ -216,7 +236,38 @@
             menuBtn.addEventListener('click', function(){ mobileMenu.classList.toggle('show'); });
         })();
 
-        const FILES = { aquatic: 'aquaticlife_dataset.csv', wildlife: 'pva_dynamic_dataset.csv' };
+        const FILES = { aquatic: 'enhanced_aquatic_dataset_final_clean.csv', wildlife: 'pva_dynamic_dataset.csv' };
+        // Remote facts API via OpenRouter (LLM) using user's key
+        const FACTS_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
+        const FACTS_API_KEY = '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';
+        // CORS proxy for local development
+        const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/';
+        // Cache last facts per species to avoid repeats
+        const LAST_FACT_BY_SPECIES = {};
+        
+        // Test API connection
+        async function testAPI() {
+            try {
+                console.log('Testing API connection...');
+                const res = await fetch(FACTS_API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + FACTS_API_KEY
+                    },
+                    body: JSON.stringify({
+                        model: 'openrouter/auto',
+                        messages: [{ role: 'user', content: 'Test' }],
+                        max_tokens: 10
+                    })
+                });
+                console.log('API test response:', res.status, res.statusText);
+                return res.ok;
+            } catch (e) {
+                console.error('API test failed:', e);
+                return false;
+            }
+        }
         const STATES = ['Andhra Pradesh','Arunachal Pradesh','Assam','Bihar','Chhattisgarh','Goa','Gujarat','Haryana','Himachal Pradesh','Jharkhand','Karnataka','Kerala','Madhya Pradesh','Maharashtra','Manipur','Meghalaya','Mizoram','Nagaland','Odisha','Punjab','Rajasthan','Sikkim','Tamil Nadu','Telangana','Tripura','Uttar Pradesh','Uttarakhand','West Bengal','Andaman & Nicobar','Chandigarh','Dadra & Nagar Haveli and Daman & Diu','Delhi','Jammu & Kashmir','Ladakh','Lakshadweep','Puducherry'];
 
         let datasets = { aquatic: [], wildlife: [] };
@@ -254,16 +305,24 @@
         }
 
         function normalizeAquatic(row){
+            // Map new enhanced aquatic dataset columns
             const status = (row['Conservation_Status']||'').replace(/\.$/, '');
-            const threat = row['Dominant_Threats'] || '-';
+            const threat = row['Dominant_Threat_Factor'] || row['Dominant_Threats'] || '-';
             return {
-                common: row['Common_Name'],
+                common: row['Species_Name'] || row['Common_Name'],
                 scientific: row['Scientific_Name'],
                 status,
                 threat,
-                suggestion: row['Conservation_Suggestions'] || '-',
+                suggestion: row['Conservation_Suggestions_Detailed'] || row['Conservation_Suggestions'] || '-',
                 correlation: estimateCorrelationFromThreat(threat, status),
-                years: estimateYearsFromStatus(status)
+                years: estimateYearsFromStatus(status),
+                population: parseFloat(row['N_Current_Pop_Size']||'0') || 0,
+                envStochasticity: parseFloat(row['Es_Environmental_Stochasticity']||'0') || 0,
+                habitatQuality: parseFloat(row['Habitat_Quality_Index']||'0') || 0,
+                pollution: parseFloat(row['Threat_Score_Pollution']||'0') || 0,
+                overfishing: parseFloat(row['Threat_Score_Overfishing']||'0') || 0,
+                climateChange: parseFloat(row['Threat_Score_ClimateChange']||'0') || 0,
+                overharvest: parseFloat(row['Overharvest_Rate']||'0') || 0
             };
         }
         function normalizeWildlife(row){
@@ -432,6 +491,98 @@
             return uniqueFacts[factIndex];
         }
 
+        async function fetchGeneratedFact(speciesName){
+            if (!FACTS_API_KEY || !FACTS_API_URL) throw new Error('Facts API not configured');
+            
+            try {
+                console.log('Fetching fact for:', speciesName);
+                
+                // Try with minimal headers first
+                const res = await fetch(FACTS_API_URL, {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + FACTS_API_KEY
+                    },
+                    body: JSON.stringify({
+                        model: 'openrouter/auto',
+                        messages: [
+                            { role: 'user', content: `One interesting fact about ${speciesName}:` }
+                        ],
+                        max_tokens: 25,
+                        temperature: 0.8
+                    })
+                });
+                
+                console.log('API response status:', res.status);
+                console.log('API response headers:', Object.fromEntries(res.headers.entries()));
+                
+                if (!res.ok) {
+                    const errorText = await res.text();
+                    console.error('API error response:', errorText);
+                    throw new Error(`HTTP ${res.status}: ${errorText}`);
+                }
+                
+                const data = await res.json();
+                console.log('API response data:', data);
+                
+                if (data && data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) {
+                    const fact = data.choices[0].message.content.trim();
+                    console.log('Generated fact:', fact);
+                    
+                    // Check for duplicate facts
+                    if (LAST_FACT_BY_SPECIES[speciesName] && LAST_FACT_BY_SPECIES[speciesName] === fact) {
+                        console.log('Same fact detected, retrying...');
+                        return await fetchGeneratedFactRetry(speciesName);
+                    }
+                    
+                    LAST_FACT_BY_SPECIES[speciesName] = fact;
+                    return fact;
+                }
+                throw new Error('No content in response');
+                
+            } catch (err) {
+                console.error('Fact fetch error:', err);
+                throw err;
+            }
+        }
+
+        async function fetchGeneratedFactRetry(speciesName){
+            try {
+                console.log('Retrying fact fetch for:', speciesName);
+                const res = await fetch(FACTS_API_URL, {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + FACTS_API_KEY
+                    },
+                    body: JSON.stringify({
+                        model: 'openrouter/auto',
+                        messages: [
+                            { role: 'user', content: `Another fact about ${speciesName}:` }
+                        ],
+                        max_tokens: 25,
+                        temperature: 0.9
+                    })
+                });
+                
+                if (!res.ok) throw new Error('Retry failed: ' + res.status);
+                
+                const data = await res.json();
+                if (data && data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) {
+                    const fact = data.choices[0].message.content.trim();
+                    LAST_FACT_BY_SPECIES[speciesName] = fact;
+                    return fact;
+                }
+                throw new Error('No content in retry response');
+            } catch (err) {
+                console.error('Retry failed:', err);
+                throw err;
+            }
+        }
+
         function renderDetails(item){
             const yearsEl = document.getElementById('yearsValue');
             const threatEl = document.getElementById('dominantThreat');
@@ -452,20 +603,41 @@
             if (statusEl) statusEl.textContent = item.status || '—';
             
             // Calculate dominant factor percentage based on threat scores
-            const threatScores = {
-                fragmentation: item.fragmentation || 0,
-                poaching: item.poaching || 0,
-                conflict: item.conflict || 0,
-                harvest: item.harvest || 0
-            };
+            let threatScores, factorNames;
             
-            // Find the dominant factor name
-            const factorNames = {
-                fragmentation: 'Fragmentation',
-                poaching: 'Poaching',
-                conflict: 'Conflict',
-                harvest: 'Harvest Rate'
-            };
+            if (item.pollution !== undefined) {
+                // Aquatic species - use actual CSV threat factors
+                threatScores = {
+                    pollution: item.pollution || 0,
+                    overfishing: item.overfishing || 0,
+                    climateChange: item.climateChange || 0,
+                    overharvest: item.overharvest || 0,
+                    envStochasticity: item.envStochasticity || 0,
+                    habitatQuality: item.habitatQuality || 0
+                };
+                factorNames = {
+                    pollution: 'Pollution',
+                    overfishing: 'Overfishing',
+                    climateChange: 'Climate Change',
+                    overharvest: 'Overharvest',
+                    envStochasticity: 'Environmental Stochasticity',
+                    habitatQuality: 'Habitat Quality'
+                };
+            } else {
+                // Wildlife species - use existing structure
+                threatScores = {
+                    fragmentation: item.fragmentation || 0,
+                    poaching: item.poaching || 0,
+                    conflict: item.conflict || 0,
+                    harvest: item.harvest || 0
+                };
+                factorNames = {
+                    fragmentation: 'Fragmentation',
+                    poaching: 'Poaching',
+                    conflict: 'Conflict',
+                    harvest: 'Harvest Rate'
+                };
+            }
             
             const maxThreat = Math.max(...Object.values(threatScores));
             const totalThreat = Object.values(threatScores).reduce((a, b) => a + b, 0);
@@ -482,9 +654,41 @@
             // Store the dominant factor name for use in pie chart
             item.dominantFactorName = dominantFactorName;
             
-            // Get and display species fact
-            getSpeciesFact(item.common).then(fact => {
-                if (factEl) factEl.textContent = fact;
+            // Show animated loading state immediately
+            if (factEl) {
+                factEl.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <div class="fact-spinner"></div>
+                        <span>Generating fact...</span>
+                    </div>
+                `;
+            }
+            
+            // Add timeout wrapper for faster failure detection
+            const timeoutPromise = new Promise((_, reject) => 
+                setTimeout(() => reject(new Error('Request timeout')), 6000)
+            );
+            
+            // Fetch fact asynchronously without blocking UI
+            Promise.race([
+                fetchGeneratedFact(item.common || item.scientific || 'species'),
+                timeoutPromise
+            ])
+            .then(remoteFact => {
+                console.log('Successfully fetched fact:', remoteFact);
+                if (factEl) factEl.textContent = remoteFact;
+            })
+            .catch(e => {
+                console.error('Fact fetch failed:', e);
+                // Show fallback fact instead of error message
+                const fallbackFacts = [
+                    `The ${item.common} is a fascinating species with unique ecological characteristics.`,
+                    `This species plays an important role in its ecosystem and requires conservation attention.`,
+                    `The ${item.common} has adapted to survive in challenging environmental conditions.`,
+                    `Conservation efforts are crucial for the long-term survival of this species.`
+                ];
+                const randomFact = fallbackFacts[Math.floor(Math.random() * fallbackFacts.length)];
+                if (factEl) factEl.textContent = randomFact;
             });
             
             setSpeciesImage(item);
@@ -593,23 +797,35 @@
             const ctx = canvas.getContext('2d');
             const dark = document.documentElement.getAttribute('data-theme')==='dark';
             const text = dark ? '#b9d4c7' : '#5a6c7d';
-            
+ 
             // If a specific species is selected, show its threat factors
-            if (selectedSpecies && selectedSpecies.fragmentation !== undefined) {
+            if (selectedSpecies && (selectedSpecies.fragmentation !== undefined || selectedSpecies.pollution !== undefined)) {
+                // Wildlife selected species (fragmentation/poaching/conflict/harvest)
                 const threatFactors = {
-                    'Fragmentation': selectedSpecies.fragmentation || 0,
-                    'Poaching': selectedSpecies.poaching || 0,
-                    'Conflict': selectedSpecies.conflict || 0,
-                    'Harvest Rate': selectedSpecies.harvest || 0
+                    ...(selectedSpecies.fragmentation !== undefined ? {
+                        'Fragmentation': selectedSpecies.fragmentation || 0,
+                        'Poaching': selectedSpecies.poaching || 0,
+                        'Conflict': selectedSpecies.conflict || 0,
+                        'Harvest Rate': selectedSpecies.harvest || 0
+                    } : {}),
+                    // Aquatic selected species (actual CSV factors)
+                    ...(selectedSpecies.pollution !== undefined ? {
+                        'Pollution': selectedSpecies.pollution || 0,
+                        'Overfishing': selectedSpecies.overfishing || 0,
+                        'Climate Change': selectedSpecies.climateChange || 0,
+                        'Overharvest': selectedSpecies.overharvest || 0,
+                        'Environmental Stochasticity': selectedSpecies.envStochasticity || 0,
+                        'Habitat Quality': selectedSpecies.habitatQuality || 0
+                    } : {})
                 };
-                
+                 
                 const labels = Object.keys(threatFactors);
                 const data = Object.values(threatFactors);
                 const total = data.reduce((a,b) => a + b, 0);
                 const colors = ['#e23d3d', '#ff6b35', '#f7931e', '#8bc34a'];
-                
+ 
                 if (window._pieChart) window._pieChart.destroy();
-                
+ 
                 try {
                     window._pieChart = new Chart(ctx, {
                         type: 'pie',
@@ -915,6 +1131,10 @@
         (async function init(){
             try {
                 console.log('Initializing dashboard...');
+                // Test API connection first
+                const apiWorking = await testAPI();
+                console.log('API working:', apiWorking);
+                
                 await Promise.all([ensureLoaded('aquatic'), ensureLoaded('wildlife')]);
                 console.log('Data loaded:', { aquatic: datasets.aquatic?.length, wildlife: datasets.wildlife?.length });
                 populateStates();
