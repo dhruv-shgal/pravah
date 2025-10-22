@@ -1,0 +1,5 @@
+.vscode
+eco_connect/
+myenv/
+__pycache__/
+*.pyc   
