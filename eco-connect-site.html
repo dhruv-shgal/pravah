@@ -1,0 +1,2644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco-Connect • Community Conservation Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-green: #2d8659;
+            --secondary-green: #3d9970;
+            --light-green: #6ec99d;
+            --mint-green: #a8e6cf;
+            --forest-green: #1b5e42;
+            --bg-white: #ffffff;
+            --text-dark: #2c3e50;
+            --text-light: #5a6c7d;
+            --accent-green: #52c093;
+            --subtle-bg: #f7faf9;
+            --border-light: #e3e8e7;
+            --warning-orange: #f39c12;
+            --success-green: #27ae60;
+        }
+
+        [data-theme="dark"] {
+            --primary-green: #6ec99d;
+            --secondary-green: #52c093;
+            --light-green: #a8e6cf;
+            --mint-green: #cde7d6;
+            --forest-green: #103b24;
+            --bg-white: #0b1f16;
+            --text-dark: #e8f5e9;
+            --text-light: #b9d4c7;
+            --accent-green: #6ec99d;
+            --subtle-bg: #0e2c1d;
+            --border-light: #214a38;
+            --warning-orange: #ff9f43;
+            --success-green: #51cf66;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-white);
+            color: var(--text-dark);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--bg-white);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-green);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-green);
+        }
+
+        .cta-nav {
+            background: var(--primary-green);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .cta-nav:hover {
+            background: var(--forest-green);
+            transform: translateY(-2px);
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            background: var(--subtle-bg);
+            border: 2px solid var(--border-light);
+            border-radius: 25px;
+            padding: 0.3rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 40px;
+            height: 20px;
+            background: var(--text-light);
+            border-radius: 20px;
+            transition: background 0.3s ease;
+        }
+
+        .toggle-switch.active {
+            background: var(--primary-green);
+        }
+
+        .toggle-slider {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 16px;
+            height: 16px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+
+        .toggle-switch.active .toggle-slider {
+            transform: translateX(20px);
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 80px;
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, var(--mint-green) 0%, var(--bg-white) 50%, var(--subtle-bg) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2352c093' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+            z-index: 0;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-text h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--forest-green);
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .hero-text p {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--bg-white);
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            border: 2px solid var(--border-light);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-green);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-top: 0.5rem;
+        }
+
+        .hero-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .community-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            max-width: 400px;
+        }
+
+        .community-card {
+            background: var(--bg-white);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .community-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .community-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .community-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-green);
+            margin-bottom: 3rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--bg-white);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 2px solid var(--border-light);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-green), var(--light-green));
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(45, 134, 89, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--primary-green);
+            margin-bottom: 1rem;
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+
+        .feature-description {
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        /* Activities Section */
+        .activities {
+            background: var(--subtle-bg);
+            padding: 5rem 2rem;
+        }
+
+        .activities-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .activities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .activity-card {
+            background: var(--bg-white);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .activity-card:hover {
+            transform: scale(1.05);
+        }
+
+        .activity-image {
+            height: 200px;
+            background: linear-gradient(135deg, var(--primary-green), var(--light-green));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: white;
+        }
+
+        .activity-content {
+            padding: 1.5rem;
+        }
+
+        .activity-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .activity-description {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .activity-points {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary-green);
+            font-weight: 600;
+        }
+
+        /* Impact Section */
+        .impact {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .impact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .impact-visual {
+            background: var(--subtle-bg);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .impact-chart {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: conic-gradient(
+                var(--primary-green) 0deg 120deg,
+                var(--light-green) 120deg 240deg,
+                var(--mint-green) 240deg 360deg
+            );
+            margin: 0 auto 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .impact-chart::before {
+            content: '';
+            width: 120px;
+            height: 120px;
+            background: var(--bg-white);
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .impact-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-green);
+            z-index: 1;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary-green), var(--forest-green));
+            color: white;
+            padding: 5rem 2rem;
+            text-align: center;
+        }
+
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .cta-description {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: white;
+            color: var(--primary-green);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: var(--primary-green);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--forest-green);
+            color: white;
+            padding: 3rem 2rem 1rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            color: var(--mint-green);
+        }
+
+        .footer-section a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--mint-green);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-text h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .impact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        /* Scroll animations */
+        .scroll-animate {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .scroll-animate.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Upload Section Styles */
+        .upload-section {
+            padding: 5rem 2rem;
+            background: var(--subtle-bg);
+        }
+
+        .upload-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .upload-subtitle {
+            text-align: center;
+            color: var(--text-light);
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+        }
+
+        .upload-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+
+        .upload-form-card {
+            background: var(--bg-white);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 2px solid var(--border-light);
+        }
+
+        .upload-form-card h3 {
+            color: var(--primary-green);
+            margin-bottom: 2rem;
+            font-size: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .upload-area {
+            border: 2px dashed var(--border-light);
+            border-radius: 12px;
+            padding: 3rem 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--subtle-bg);
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary-green);
+            background: rgba(45, 134, 89, 0.05);
+        }
+
+        .upload-area.dragover {
+            border-color: var(--primary-green);
+            background: rgba(45, 134, 89, 0.1);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            color: var(--primary-green);
+            margin-bottom: 1rem;
+        }
+
+        .upload-text {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .upload-main {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .upload-sub {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .image-preview {
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .preview-image {
+            width: 100%;
+            max-height: 200px;
+            object-fit: cover;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-select, .form-textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            background: var(--bg-white);
+            color: var(--text-dark);
+            font-family: 'Poppins', sans-serif;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary-green);
+        }
+
+        .btn-upload {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-upload:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(45, 134, 89, 0.3);
+        }
+
+        .btn-upload:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-upload.loading {
+            pointer-events: none;
+        }
+
+        .btn-upload.loading::after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+
+        /* Verification Info Styles */
+        .verification-info {
+            background: var(--bg-white);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 2px solid var(--border-light);
+        }
+
+        .verification-info h3 {
+            color: var(--primary-green);
+            margin-bottom: 2rem;
+            font-size: 1.5rem;
+        }
+
+        .verification-steps {
+            margin-bottom: 2rem;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .step-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-green);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .step-content h4 {
+            color: var(--text-dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .step-content p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .points-info {
+            background: var(--subtle-bg);
+            padding: 1.5rem;
+            border-radius: 12px;
+        }
+
+        .points-info h4 {
+            color: var(--primary-green);
+            margin-bottom: 1rem;
+        }
+
+        .point-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .point-item:last-child {
+            border-bottom: none;
+        }
+
+        .point-icon {
+            font-size: 1.2rem;
+        }
+
+        .point-activity {
+            flex: 1;
+            margin-left: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        .point-value {
+            font-weight: 600;
+            color: var(--primary-green);
+        }
+
+        /* Model Testing Section Styles */
+        .model-testing-section {
+            padding: 5rem 2rem;
+            background: var(--bg-white);
+        }
+
+        .model-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .model-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .model-card {
+            background: var(--subtle-bg);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid var(--border-light);
+            transition: all 0.3s ease;
+        }
+
+        .model-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(45, 134, 89, 0.1);
+        }
+
+        .model-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .model-header h3 {
+            color: var(--primary-green);
+            font-size: 1.2rem;
+            margin: 0;
+        }
+
+        .model-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--warning-orange);
+        }
+
+        .status-indicator.online {
+            background: var(--success-green);
+        }
+
+        .status-indicator.offline {
+            background: #e74c3c;
+        }
+
+        .status-text {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .model-info {
+            margin-bottom: 1.5rem;
+        }
+
+        .model-info p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .model-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .model-stats span {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .test-model-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--primary-green);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .test-model-btn:hover {
+            background: var(--secondary-green);
+            transform: translateY(-2px);
+        }
+
+        .test-model-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .overall-status {
+            background: var(--subtle-bg);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid var(--border-light);
+        }
+
+        .overall-status h3 {
+            color: var(--primary-green);
+            margin-bottom: 1.5rem;
+        }
+
+        .health-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .health-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            background: var(--bg-white);
+            border-radius: 8px;
+            border: 1px solid var(--border-light);
+        }
+
+        .health-label {
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .health-value {
+            font-weight: 600;
+            color: var(--primary-green);
+        }
+
+        .health-value.error {
+            color: #e74c3c;
+        }
+
+        .health-value.warning {
+            color: var(--warning-orange);
+        }
+
+        /* Stats Section Styles */
+        .stats-section {
+            padding: 5rem 2rem;
+        }
+
+        .stats-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .user-stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .stat-card-large {
+            background: var(--bg-white);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 2px solid var(--border-light);
+            text-align: center;
+        }
+
+        .stat-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-number-large {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary-green);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label-large {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-progress {
+            text-align: left;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--border-light);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-green), var(--light-green));
+            width: 0%;
+            transition: width 1s ease;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .activity-breakdown {
+            text-align: left;
+        }
+
+        .breakdown-item {
+            padding: 0.5rem 0;
+            color: var(--text-dark);
+            font-size: 0.95rem;
+        }
+
+        .badges-card {
+            background: var(--bg-white);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 2px solid var(--border-light);
+        }
+
+        .badges-card h3 {
+            color: var(--primary-green);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .badges-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .badge-item {
+            background: var(--subtle-bg);
+            padding: 1rem;
+            border-radius: 12px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .badge-item.earned {
+            background: linear-gradient(135deg, var(--primary-green), var(--light-green));
+            color: white;
+        }
+
+        .badge-item.locked {
+            opacity: 0.5;
+        }
+
+        .badge-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .badge-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* Recent Uploads Styles */
+        .recent-uploads {
+            padding: 5rem 2rem;
+            background: var(--subtle-bg);
+        }
+
+        .uploads-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .uploads-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .upload-card {
+            background: var(--bg-white);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .upload-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .upload-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .upload-content {
+            padding: 1.5rem;
+        }
+
+        .upload-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .upload-type {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .upload-points {
+            background: var(--primary-green);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .upload-description {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .upload-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .upload-status {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .status-verified {
+            color: var(--success-green);
+        }
+
+        .no-uploads {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-light);
+        }
+
+        .no-uploads-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .no-uploads h3 {
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+
+        /* Success/Error Messages */
+        .message {
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            display: none;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .message.success {
+            background: rgba(39, 174, 96, 0.1);
+            color: var(--success-green);
+            border: 1px solid rgba(39, 174, 96, 0.3);
+        }
+
+        .message.error {
+            background: rgba(231, 76, 60, 0.1);
+            color: var(--error-red);
+            border: 1px solid rgba(231, 76, 60, 0.3);
+        }
+
+        .message.show {
+            display: flex;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .upload-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .user-stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .badges-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .upload-form-card, .verification-info {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <span>🌿</span>
+                <span>PRAVAH</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="profile.html">Dashboard</a></li>
+                <li><a href="eco-connect-site.html" class="active">Eco-Connect</a></li>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="#" id="logoutBtn" class="cta-nav">Logout</a></li>
+                <li>
+                    <div class="theme-toggle" id="themeToggle">
+                        <div class="toggle-switch" id="toggleSwitch">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="fade-in">Join the Eco-Movement</h1>
+                <p class="fade-in">Upload photos of your conservation activities and earn points automatically. Every action counts towards a greener future!</p>
+                
+                <div class="hero-stats fade-in">
+                    <div class="stat-card">
+                        <span class="stat-number" data-target="15000">0</span>
+                        <div class="stat-label">Active Members</div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" data-target="50000">0</span>
+                        <div class="stat-label">Trees Planted</div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" data-target="200">0</span>
+                        <div class="stat-label">Species Monitored</div>
+                    </div>
+                </div>
+
+                <div class="cta-buttons fade-in">
+                    <a href="#upload" class="btn btn-primary">
+                        <i class="fas fa-camera"></i>
+                        Upload Activity
+                    </a>
+                    <a href="#stats" class="btn btn-secondary">
+                        <i class="fas fa-chart-line"></i>
+                        View Stats
+                    </a>
+                </div>
+            </div>
+
+            <div class="hero-visual fade-in">
+                <div class="community-grid">
+                    <div class="community-card">
+                        <div class="community-icon">🌱</div>
+                        <div class="community-title">Plant Trees</div>
+                    </div>
+                    <div class="community-card">
+                        <div class="community-icon">🗑️</div>
+                        <div class="community-title">Collect Waste</div>
+                    </div>
+                    <div class="community-card">
+                        <div class="community-icon">🐾</div>
+                        <div class="community-title">Feed Animals</div>
+                    </div>
+                    <div class="community-card">
+                        <div class="community-icon">📸</div>
+                        <div class="community-title">Document Impact</div>
+                    </div>
+                    <div class="community-card">
+                        <div class="community-icon">🏆</div>
+                        <div class="community-title">Earn Points</div>
+                    </div>
+                    <div class="community-card">
+                        <div class="community-icon">🤝</div>
+                        <div class="community-title">Build Community</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Upload Section -->
+    <section class="upload-section" id="upload">
+        <div class="upload-container">
+            <h2 class="section-title scroll-animate">Upload Your Eco-Activity</h2>
+            <p class="upload-subtitle scroll-animate">Share your conservation efforts and earn eco-points automatically through AI verification</p>
+            
+            <div class="upload-grid">
+                <div class="upload-form-card scroll-animate">
+                    <h3>📸 Upload Activity Photo</h3>
+                    <div id="messageArea"></div>
+                    <form id="uploadForm" class="upload-form">
+                        <div class="form-group">
+                            <label for="activityImage" class="upload-label">
+                                <div class="upload-area" id="uploadArea">
+                                    <div class="upload-icon">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                    </div>
+                                    <div class="upload-text">
+                                        <span class="upload-main">Click to upload or drag & drop</span>
+                                        <span class="upload-sub">PNG, JPG up to 10MB</span>
+                                    </div>
+                                </div>
+                                <input type="file" id="activityImage" accept="image/*" hidden>
+                            </label>
+                            <div class="image-preview" id="imagePreview"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="activityType">Activity Type</label>
+                            <select id="activityType" class="form-select" required>
+                                <option value="">Select activity type</option>
+                                <option value="plantation">🌳 Tree Plantation (+25 points)</option>
+                                <option value="waste_collection">🗑️ Waste Collection (+20 points)</option>
+                                <option value="animal_feeding">🐾 Animal Feeding (+30 points)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="activityDescription">Description (Optional)</label>
+                            <textarea id="activityDescription" class="form-textarea" placeholder="Tell us about your activity..." rows="3"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn-upload" id="uploadBtn">
+                            <i class="fas fa-upload"></i>
+                            <span>Verify & Upload</span>
+                        </button>
+                    </form>
+                </div>
+
+                <div class="verification-info scroll-animate">
+                    <h3>🤖 AI Verification Process</h3>
+                    <div class="verification-steps">
+                        <div class="step">
+                            <div class="step-icon">1</div>
+                            <div class="step-content">
+                                <h4>Upload Image</h4>
+                                <p>Select your activity photo and type</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-icon">2</div>
+                            <div class="step-content">
+                                <h4>AI Analysis</h4>
+                                <p>Our AI models verify your activity</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-icon">3</div>
+                            <div class="step-content">
+                                <h4>Earn Points</h4>
+                                <p>Get eco-points added to your profile</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="points-info">
+                        <h4>Point System</h4>
+                        <div class="points-list">
+                            <div class="point-item">
+                                <span class="point-icon">🌳</span>
+                                <span class="point-activity">Tree Plantation</span>
+                                <span class="point-value">+25 pts</span>
+                            </div>
+                            <div class="point-item">
+                                <span class="point-icon">🗑️</span>
+                                <span class="point-activity">Waste Collection</span>
+                                <span class="point-value">+20 pts</span>
+                            </div>
+                            <div class="point-item">
+                                <span class="point-icon">🐾</span>
+                                <span class="point-activity">Animal Feeding</span>
+                                <span class="point-value">+30 pts</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Model Testing Section -->
+    <section class="model-testing-section" id="model-testing">
+        <div class="model-container">
+            <h2 class="section-title scroll-animate">🤖 AI Model Status</h2>
+            
+            <div class="model-grid">
+                <div class="model-card scroll-animate">
+                    <div class="model-header">
+                        <h3>🌳 Tree Plantation Model</h3>
+                        <div class="model-status" id="plantationStatus">
+                            <span class="status-indicator"></span>
+                            <span class="status-text">Checking...</span>
+                        </div>
+                    </div>
+                    <div class="model-info">
+                        <p>Detects tree planting activities and verifies conservation efforts</p>
+                        <div class="model-stats" id="plantationStats">
+                            <span>Classes: Loading...</span>
+                            <span>Accuracy: 95.2%</span>
+                        </div>
+                    </div>
+                    <button class="test-model-btn" onclick="testSpecificModel('plantation')">
+                        🧪 Test Model
+                    </button>
+                </div>
+
+                <div class="model-card scroll-animate">
+                    <div class="model-header">
+                        <h3>🗑️ Waste Collection Model</h3>
+                        <div class="model-status" id="wasteStatus">
+                            <span class="status-indicator"></span>
+                            <span class="status-text">Checking...</span>
+                        </div>
+                    </div>
+                    <div class="model-info">
+                        <p>Identifies waste collection and cleanup activities</p>
+                        <div class="model-stats" id="wasteStats">
+                            <span>Classes: Loading...</span>
+                            <span>Accuracy: 92.8%</span>
+                        </div>
+                    </div>
+                    <button class="test-model-btn" onclick="testSpecificModel('waste_management')">
+                        🧪 Test Model
+                    </button>
+                </div>
+
+                <div class="model-card scroll-animate">
+                    <div class="model-header">
+                        <h3>🐾 Animal Feeding Model</h3>
+                        <div class="model-status" id="animalStatus">
+                            <span class="status-indicator"></span>
+                            <span class="status-text">Checking...</span>
+                        </div>
+                    </div>
+                    <div class="model-info">
+                        <p>Recognizes animal feeding and care activities</p>
+                        <div class="model-stats" id="animalStats">
+                            <span>Classes: Loading...</span>
+                            <span>Accuracy: 89.6%</span>
+                        </div>
+                    </div>
+                    <button class="test-model-btn" onclick="testSpecificModel('stray_animal_feeding')">
+                        🧪 Test Model
+                    </button>
+                </div>
+
+                <div class="model-card scroll-animate">
+                    <div class="model-header">
+                        <h3>👤 Face Recognition</h3>
+                        <div class="model-status" id="faceStatus">
+                            <span class="status-indicator"></span>
+                            <span class="status-text">Checking...</span>
+                        </div>
+                    </div>
+                    <div class="model-info">
+                        <p>InsightFace model for user verification and authentication</p>
+                        <div class="model-stats" id="faceStats">
+                            <span>Model: Buffalo-L</span>
+                            <span>Accuracy: 99.1%</span>
+                        </div>
+                    </div>
+                    <button class="test-model-btn" onclick="testFaceModel()">
+                        🧪 Test Model
+                    </button>
+                </div>
+            </div>
+
+            <div class="overall-status scroll-animate">
+                <h3>📊 System Health</h3>
+                <div class="health-grid" id="healthGrid">
+                    <div class="health-item">
+                        <span class="health-label">GPU Available:</span>
+                        <span class="health-value" id="gpuStatus">Checking...</span>
+                    </div>
+                    <div class="health-item">
+                        <span class="health-label">Models Loaded:</span>
+                        <span class="health-value" id="modelsLoaded">Checking...</span>
+                    </div>
+                    <div class="health-item">
+                        <span class="health-label">Face Recognition:</span>
+                        <span class="health-value" id="faceRecognition">Checking...</span>
+                    </div>
+                    <div class="health-item">
+                        <span class="health-label">API Status:</span>
+                        <span class="health-value" id="apiStatus">Checking...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- User Stats Section -->
+    <section class="stats-section" id="stats">
+        <div class="stats-container">
+            <h2 class="section-title scroll-animate">Your Eco-Impact</h2>
+            
+            <div class="user-stats-grid">
+                <div class="stat-card-large scroll-animate">
+                    <div class="stat-icon">🏆</div>
+                    <div class="stat-content">
+                        <div class="stat-number-large" id="totalPoints">0</div>
+                        <div class="stat-label-large">Total Eco-Points</div>
+                        <div class="stat-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="pointsProgress"></div>
+                            </div>
+                            <span class="progress-text">Next badge: <span id="nextBadge">Eco-Starter</span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card-large scroll-animate">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-content">
+                        <div class="stat-number-large" id="totalActivities">0</div>
+                        <div class="stat-label-large">Activities Completed</div>
+                        <div class="activity-breakdown">
+                            <div class="breakdown-item">
+                                <span>🌳 Plantations: <span id="plantationCount">0</span></span>
+                            </div>
+                            <div class="breakdown-item">
+                                <span>🗑️ Cleanups: <span id="wasteCount">0</span></span>
+                            </div>
+                            <div class="breakdown-item">
+                                <span>🐾 Animal Care: <span id="animalCount">0</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="badges-card scroll-animate">
+                    <h3>🎖️ Your Badges</h3>
+                    <div class="badges-grid" id="badgesGrid">
+                        <!-- Badges will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recent Uploads Section -->
+    <section class="recent-uploads" id="recent">
+        <div class="uploads-container">
+            <h2 class="section-title scroll-animate">Recent Activities</h2>
+            <div class="uploads-grid" id="uploadsGrid">
+                <!-- Recent uploads will be populated by JavaScript -->
+            </div>
+            <div class="no-uploads" id="noUploads">
+                <div class="no-uploads-icon">📸</div>
+                <h3>No activities yet</h3>
+                <p>Start uploading your eco-activities to see them here!</p>
+                <a href="#upload" class="btn btn-primary">Upload First Activity</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <h2 class="section-title scroll-animate">Platform Features</h2>
+        <div class="features-grid">
+            <div class="feature-card scroll-animate">
+                <div class="feature-icon">📱</div>
+                <h3 class="feature-title">Activity Tracking</h3>
+                <p class="feature-description">Log your conservation activities, from tree planting to wildlife monitoring. Every action counts towards a greener future.</p>
+            </div>
+            <div class="feature-card scroll-animate">
+                <div class="feature-icon">🏅</div>
+                <h3 class="feature-title">Eco-Points System</h3>
+                <p class="feature-description">Earn points for your environmental contributions. Unlock badges, climb leaderboards, and showcase your impact.</p>
+            </div>
+            <div class="feature-card scroll-animate">
+                <div class="feature-icon">🌍</div>
+                <h3 class="feature-title">Global Community</h3>
+                <p class="feature-description">Connect with like-minded conservationists worldwide. Share experiences, learn from others, and collaborate on projects.</p>
+            </div>
+            <div class="feature-card scroll-animate">
+                <div class="feature-icon">📊</div>
+                <h3 class="feature-title">Impact Analytics</h3>
+                <p class="feature-description">Visualize your environmental impact with detailed analytics. See how your actions contribute to global conservation goals.</p>
+            </div>
+            <div class="feature-card scroll-animate">
+                <div class="feature-icon">🎯</div>
+                <h3 class="feature-title">Conservation Challenges</h3>
+                <p class="feature-description">Participate in monthly challenges designed to maximize your environmental impact and engage with the community.</p>
+            </div>
+            <div class="feature-card scroll-animate">
+                <div class="feature-icon">🔬</div>
+                <h3 class="feature-title">Citizen Science</h3>
+                <p class="feature-description">Contribute to real scientific research by participating in biodiversity monitoring and data collection projects.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Activities Section -->
+    <section class="activities" id="activities">
+        <div class="activities-container">
+            <h2 class="section-title scroll-animate">Conservation Activities</h2>
+            <div class="activities-grid">
+                <div class="activity-card scroll-animate">
+                    <div class="activity-image">🌳</div>
+                    <div class="activity-content">
+                        <h3 class="activity-title">Tree Planting</h3>
+                        <p class="activity-description">Plant native trees in your area and help restore forest ecosystems.</p>
+                        <div class="activity-points">
+                            <i class="fas fa-star"></i>
+                            <span>50 Eco-Points</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="activity-card scroll-animate">
+                    <div class="activity-image">🦅</div>
+                    <div class="activity-content">
+                        <h3 class="activity-title">Wildlife Monitoring</h3>
+                        <p class="activity-description">Document and track local wildlife populations for conservation research.</p>
+                        <div class="activity-points">
+                            <i class="fas fa-star"></i>
+                            <span>30 Eco-Points</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="activity-card scroll-animate">
+                    <div class="activity-image">🌊</div>
+                    <div class="activity-content">
+                        <h3 class="activity-title">Water Conservation</h3>
+                        <p class="activity-description">Participate in water body cleanup and conservation initiatives.</p>
+                        <div class="activity-points">
+                            <i class="fas fa-star"></i>
+                            <span>40 Eco-Points</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="activity-card scroll-animate">
+                    <div class="activity-image">♻️</div>
+                    <div class="activity-content">
+                        <h3 class="activity-title">Waste Management</h3>
+                        <p class="activity-description">Organize community cleanup drives and promote recycling.</p>
+                        <div class="activity-points">
+                            <i class="fas fa-star"></i>
+                            <span>35 Eco-Points</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact Section -->
+    <section class="impact" id="impact">
+        <h2 class="section-title scroll-animate">Our Collective Impact</h2>
+        <div class="impact-grid">
+            <div class="impact-visual scroll-animate">
+                <div class="impact-chart">
+                    <div class="impact-number">85%</div>
+                </div>
+                <h3>Conservation Success Rate</h3>
+                <p>Projects completed successfully with measurable environmental impact</p>
+            </div>
+            <div class="scroll-animate">
+                <h3>Making a Real Difference</h3>
+                <p>Our community has achieved remarkable conservation milestones through collective action and dedication to environmental protection.</p>
+                
+                <div style="margin-top: 2rem;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                        <span>Carbon Footprint Reduced</span>
+                        <span>75%</span>
+                    </div>
+                    <div style="background: var(--border-light); height: 8px; border-radius: 4px; overflow: hidden;">
+                        <div style="background: var(--primary-green); height: 100%; width: 75%; transition: width 2s ease;"></div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 1.5rem;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                        <span>Biodiversity Protected</span>
+                        <span>90%</span>
+                    </div>
+                    <div style="background: var(--border-light); height: 8px; border-radius: 4px; overflow: hidden;">
+                        <div style="background: var(--light-green); height: 100%; width: 90%; transition: width 2s ease;"></div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 1.5rem;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                        <span>Community Engagement</span>
+                        <span>95%</span>
+                    </div>
+                    <div style="background: var(--border-light); height: 8px; border-radius: 4px; overflow: hidden;">
+                        <div style="background: var(--accent-green); height: 100%; width: 95%; transition: width 2s ease;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="community">
+        <div class="cta-content">
+            <h2 class="cta-title">Ready to Make a Difference?</h2>
+            <p class="cta-description">Join our growing community of environmental champions. Every action matters, every contribution counts, and together we can create a sustainable future for our planet.</p>
+            <div class="cta-buttons">
+                <a href="auth.html" class="btn btn-primary">
+                    <i class="fas fa-rocket"></i>
+                    Get Started Today
+                </a>
+                <a href="#features" class="btn btn-secondary">
+                    <i class="fas fa-info-circle"></i>
+                    Learn More
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>🌿 Eco-Connect</h3>
+                <p>Empowering communities to take action for environmental conservation through technology and collaboration.</p>
+                <div style="margin-top: 1rem;">
+                    <a href="#" style="display: inline-block; margin-right: 1rem; font-size: 1.5rem;">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+                    <a href="#" style="display: inline-block; margin-right: 1rem; font-size: 1.5rem;">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" style="display: inline-block; margin-right: 1rem; font-size: 1.5rem;">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" style="display: inline-block; font-size: 1.5rem;">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Platform</h3>
+                <a href="#features">Features</a>
+                <a href="#activities">Activities</a>
+                <a href="auth.html">Sign Up</a>
+                <a href="auth.html">Login</a>
+            </div>
+            <div class="footer-section">
+                <h3>Community</h3>
+                <a href="#impact">Our Impact</a>
+                <a href="#">Success Stories</a>
+                <a href="#">Leaderboard</a>
+                <a href="#">Events</a>
+            </div>
+            <div class="footer-section">
+                <h3>Support</h3>
+                <a href="#">Help Center</a>
+                <a href="#">Contact Us</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Eco-Connect. All rights reserved. | Built with 💚 for our planet</p>
+        </div>
+    </footer>
+
+    <script>
+        // Theme Management
+        const themeToggle = document.getElementById('themeToggle');
+        const toggleSwitch = document.getElementById('toggleSwitch');
+        const html = document.documentElement;
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        html.setAttribute('data-theme', savedTheme);
+        if (savedTheme === 'dark') {
+            toggleSwitch.classList.add('active');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            toggleSwitch.classList.toggle('active');
+        });
+
+        // Eco-Connect Data Management
+        class EcoConnectManager {
+            constructor() {
+                this.userStats = this.loadUserStats();
+                this.uploads = this.loadUploads();
+                this.currentUser = null;
+                this.badges = [
+                    { id: 'starter', name: 'Eco-Starter', icon: '🌱', requirement: 1, earned: false },
+                    { id: 'contributor', name: 'Green Contributor', icon: '🌿', requirement: 5, earned: false },
+                    { id: 'guardian', name: 'Nature Guardian', icon: '🛡️', requirement: 10, earned: false },
+                    { id: 'champion', name: 'Eco-Champion', icon: '🏆', requirement: 25, earned: false },
+                    { id: 'legend', name: 'Conservation Legend', icon: '👑', requirement: 50, earned: false }
+                ];
+                
+                this.init();
+            }
+
+            async init() {
+                // Check if user is logged in
+                await this.checkUserAuth();
+                
+                if (!this.currentUser) {
+                    // Redirect to auth page if not logged in
+                    window.location.href = '/auth';
+                    return;
+                }
+
+                this.setupUploadForm();
+                this.updateUserStats();
+                this.renderRecentUploads();
+                this.updateBadges();
+                this.updateUserDisplay();
+            }
+
+            async checkUserAuth() {
+                // Check localStorage first
+                const userData = localStorage.getItem('pravah_user');
+                if (userData) {
+                    this.currentUser = JSON.parse(userData);
+                    return;
+                }
+                
+                // Fallback to API check
+                try {
+                    const response = await fetch('/api/user-info');
+                    const result = await response.json();
+                    
+                    if (result.logged_in) {
+                        this.currentUser = result;
+                        // Store in localStorage for consistency
+                        localStorage.setItem('pravah_user', JSON.stringify(result));
+                    } else {
+                        // Redirect to login if not authenticated
+                        window.location.href = '/login.html';
+                    }
+                } catch (error) {
+                    console.error('Auth check failed:', error);
+                    // Redirect to login on error
+                    window.location.href = '/login.html';
+                }
+            }
+
+            updateUserDisplay() {
+                // Update navigation to show username
+                const logoText = document.querySelector('.logo span:last-child');
+                if (logoText && this.currentUser) {
+                    logoText.textContent = `PRAVAH • ${this.currentUser.username}`;
+                }
+            }
+
+            loadUserStats() {
+                // First check if user data exists in localStorage (from profile.html)
+                const userData = localStorage.getItem('pravah_user');
+                if (userData) {
+                    const user = JSON.parse(userData);
+                    return {
+                        totalPoints: user.ecoCoins || 0,
+                        totalActivities: user.uploads ? user.uploads.length : 0,
+                        plantationCount: user.uploads ? user.uploads.filter(u => u.type === 'plantation').length : 0,
+                        wasteCount: user.uploads ? user.uploads.filter(u => u.type === 'waste_collection').length : 0,
+                        animalCount: user.uploads ? user.uploads.filter(u => u.type === 'animal_feeding').length : 0
+                    };
+                }
+                
+                // Fallback to old stats system
+                const defaultStats = {
+                    totalPoints: 0,
+                    totalActivities: 0,
+                    plantationCount: 0,
+                    wasteCount: 0,
+                    animalCount: 0
+                };
+                return JSON.parse(localStorage.getItem('ecoUserStats')) || defaultStats;
+            }
+
+            saveUserStats() {
+                // Update both systems for compatibility
+                localStorage.setItem('ecoUserStats', JSON.stringify(this.userStats));
+                
+                // Update main user data if it exists
+                const userData = localStorage.getItem('pravah_user');
+                if (userData) {
+                    const user = JSON.parse(userData);
+                    user.ecoCoins = this.userStats.totalPoints;
+                    localStorage.setItem('pravah_user', JSON.stringify(user));
+                }
+            }
+
+            loadUploads() {
+                return JSON.parse(localStorage.getItem('ecoUploads')) || [];
+            }
+
+            saveUploads() {
+                localStorage.setItem('ecoUploads', JSON.stringify(this.uploads));
+            }
+
+            setupUploadForm() {
+                const uploadArea = document.getElementById('uploadArea');
+                const fileInput = document.getElementById('activityImage');
+                const imagePreview = document.getElementById('imagePreview');
+                const uploadForm = document.getElementById('uploadForm');
+
+                // Drag and drop functionality
+                uploadArea.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    uploadArea.classList.add('dragover');
+                });
+
+                uploadArea.addEventListener('dragleave', () => {
+                    uploadArea.classList.remove('dragover');
+                });
+
+                uploadArea.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    uploadArea.classList.remove('dragover');
+                    const files = e.dataTransfer.files;
+                    if (files.length > 0) {
+                        this.handleFileSelect(files[0]);
+                    }
+                });
+
+                uploadArea.addEventListener('click', () => {
+                    fileInput.click();
+                });
+
+                fileInput.addEventListener('change', (e) => {
+                    if (e.target.files.length > 0) {
+                        this.handleFileSelect(e.target.files[0]);
+                    }
+                });
+
+                uploadForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.handleUpload();
+                });
+            }
+
+            handleFileSelect(file) {
+                if (!file.type.startsWith('image/')) {
+                    this.showMessage('Please select a valid image file.', 'error');
+                    return;
+                }
+
+                if (file.size > 10 * 1024 * 1024) { // 10MB limit
+                    this.showMessage('File size must be less than 10MB.', 'error');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const imagePreview = document.getElementById('imagePreview');
+                    imagePreview.innerHTML = `<img src="${e.target.result}" class="preview-image" alt="Preview">`;
+                    imagePreview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+
+            async handleUpload() {
+                const fileInput = document.getElementById('activityImage');
+                const activityType = document.getElementById('activityType').value;
+                const description = document.getElementById('activityDescription').value;
+                const uploadBtn = document.getElementById('uploadBtn');
+
+                if (!fileInput.files[0]) {
+                    this.showMessage('Please select an image to upload.', 'error');
+                    return;
+                }
+
+                if (!activityType) {
+                    this.showMessage('Please select an activity type.', 'error');
+                    return;
+                }
+
+                // Show loading state
+                uploadBtn.classList.add('loading');
+                uploadBtn.disabled = true;
+
+                try {
+                    // Use real AI model verification via FastAPI
+                    const verificationResult = await this.verifyWithAI(fileInput.files[0], activityType, description);
+                    
+                    if (verificationResult.success && verificationResult.verified) {
+                        const points = verificationResult.points;
+                        const upload = {
+                            id: Date.now(),
+                            image: await this.fileToBase64(fileInput.files[0]),
+                            type: activityType,
+                            description: description || 'No description provided',
+                            points: points,
+                            timestamp: new Date().toISOString(),
+                            verified: true,
+                            verificationDetails: verificationResult.verification_details
+                        };
+
+                        this.uploads.unshift(upload);
+                        this.saveUploads();
+
+                        // Update user stats
+                        this.userStats.totalPoints += points;
+                        this.userStats.totalActivities += 1;
+                        
+                        switch(activityType) {
+                            case 'plantation':
+                                this.userStats.plantationCount += 1;
+                                break;
+                            case 'waste_collection':
+                                this.userStats.wasteCount += 1;
+                                break;
+                            case 'animal_feeding':
+                                this.userStats.animalCount += 1;
+                                break;
+                        }
+
+                        this.saveUserStats();
+                        this.updateUserStats();
+                        this.renderRecentUploads();
+                        this.updateBadges();
+
+                        this.showMessage(`🎉 ${verificationResult.message}`, 'success');
+                        
+                        // Reset form
+                        document.getElementById('uploadForm').reset();
+                        document.getElementById('imagePreview').style.display = 'none';
+                        
+                    } else {
+                        this.showMessage(`❌ ${verificationResult.message}`, 'error');
+                    }
+
+                } catch (error) {
+                    console.error('Upload error:', error);
+                    this.showMessage('❌ Upload failed. Please try again.', 'error');
+                } finally {
+                    uploadBtn.classList.remove('loading');
+                    uploadBtn.disabled = false;
+                }
+            }
+
+            async verifyWithAI(file, activityType, description) {
+                // Use specific API endpoints for different activities
+                const apiEndpoints = {
+                    'plantation': '/api/verify-plantation',
+                    'waste_collection': '/api/verify-waste-collection',
+                    'animal_feeding': '/api/verify-animal-feeding'
+                };
+
+                const endpoint = apiEndpoints[activityType] || '/api/verify-activity';
+                
+                const formData = new FormData();
+                formData.append('activity_image', file);
+                if (endpoint === '/api/verify-activity') {
+                    formData.append('activity_type', activityType);
+                }
+                formData.append('description', description);
+
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error('Verification request failed');
+                }
+
+                return await response.json();
+            }
+
+            getPointsForActivity(activityType) {
+                const pointsMap = {
+                    'plantation': 25,
+                    'waste_collection': 20,
+                    'animal_feeding': 30
+                };
+                return pointsMap[activityType] || 0;
+            }
+
+            getActivityIcon(activityType) {
+                const iconMap = {
+                    'plantation': '🌳',
+                    'waste_collection': '🗑️',
+                    'animal_feeding': '🐾'
+                };
+                return iconMap[activityType] || '📸';
+            }
+
+            getActivityName(activityType) {
+                const nameMap = {
+                    'plantation': 'Tree Plantation',
+                    'waste_collection': 'Waste Collection',
+                    'animal_feeding': 'Animal Feeding'
+                };
+                return nameMap[activityType] || 'Unknown Activity';
+            }
+
+            async fileToBase64(file) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.readAsDataURL(file);
+                    reader.onload = () => resolve(reader.result);
+                    reader.onerror = error => reject(error);
+                });
+            }
+
+            updateUserStats() {
+                document.getElementById('totalPoints').textContent = this.userStats.totalPoints.toLocaleString();
+                document.getElementById('totalActivities').textContent = this.userStats.totalActivities;
+                document.getElementById('plantationCount').textContent = this.userStats.plantationCount;
+                document.getElementById('wasteCount').textContent = this.userStats.wasteCount;
+                document.getElementById('animalCount').textContent = this.userStats.animalCount;
+
+                // Update progress bar
+                const nextBadge = this.getNextBadge();
+                if (nextBadge) {
+                    const progress = (this.userStats.totalActivities / nextBadge.requirement) * 100;
+                    document.getElementById('pointsProgress').style.width = Math.min(progress, 100) + '%';
+                    document.getElementById('nextBadge').textContent = nextBadge.name;
+                }
+            }
+
+            getNextBadge() {
+                return this.badges.find(badge => !badge.earned && this.userStats.totalActivities < badge.requirement);
+            }
+
+            updateBadges() {
+                const badgesGrid = document.getElementById('badgesGrid');
+                badgesGrid.innerHTML = '';
+
+                this.badges.forEach(badge => {
+                    badge.earned = this.userStats.totalActivities >= badge.requirement;
+                    
+                    const badgeElement = document.createElement('div');
+                    badgeElement.className = `badge-item ${badge.earned ? 'earned' : 'locked'}`;
+                    badgeElement.innerHTML = `
+                        <div class="badge-icon">${badge.icon}</div>
+                        <div class="badge-name">${badge.name}</div>
+                    `;
+                    badgesGrid.appendChild(badgeElement);
+                });
+            }
+
+            renderRecentUploads() {
+                const uploadsGrid = document.getElementById('uploadsGrid');
+                const noUploads = document.getElementById('noUploads');
+
+                if (this.uploads.length === 0) {
+                    uploadsGrid.style.display = 'none';
+                    noUploads.style.display = 'block';
+                    return;
+                }
+
+                uploadsGrid.style.display = 'grid';
+                noUploads.style.display = 'none';
+                uploadsGrid.innerHTML = '';
+
+                this.uploads.slice(0, 6).forEach(upload => {
+                    const uploadCard = document.createElement('div');
+                    uploadCard.className = 'upload-card';
+                    
+                    const date = new Date(upload.timestamp);
+                    const timeAgo = this.getTimeAgo(date);
+                    
+                    uploadCard.innerHTML = `
+                        <img src="${upload.image}" alt="${this.getActivityName(upload.type)}" class="upload-image">
+                        <div class="upload-content">
+                            <div class="upload-header">
+                                <div class="upload-type">
+                                    <span>${this.getActivityIcon(upload.type)}</span>
+                                    <span>${this.getActivityName(upload.type)}</span>
+                                </div>
+                                <div class="upload-points">+${upload.points} pts</div>
+                            </div>
+                            <div class="upload-description">${upload.description}</div>
+                            <div class="upload-meta">
+                                <span>${timeAgo}</span>
+                                <div class="upload-status status-verified">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>Verified</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    uploadsGrid.appendChild(uploadCard);
+                });
+            }
+
+            getTimeAgo(date) {
+                const now = new Date();
+                const diffInSeconds = Math.floor((now - date) / 1000);
+                
+                if (diffInSeconds < 60) return 'Just now';
+                if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
+                if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
+                return `${Math.floor(diffInSeconds / 86400)}d ago`;
+            }
+
+            showMessage(text, type) {
+                const messageArea = document.getElementById('messageArea');
+                
+                const message = document.createElement('div');
+                message.className = `message ${type} show`;
+                message.innerHTML = `
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                    <span>${text}</span>
+                `;
+                
+                messageArea.innerHTML = '';
+                messageArea.appendChild(message);
+                
+                setTimeout(() => {
+                    message.classList.remove('show');
+                    setTimeout(() => messageArea.innerHTML = '', 300);
+                }, 5000);
+            }
+        }
+
+        // Model Testing Functions
+        async function checkModelStatus() {
+            try {
+                const response = await fetch('/api/test-models');
+                const result = await response.json();
+                
+                if (result.success) {
+                    updateModelStatus('plantation', result.models.plantation);
+                    updateModelStatus('waste_management', result.models.waste_management);
+                    updateModelStatus('stray_animal_feeding', result.models.stray_animal_feeding);
+                    
+                    // Update health status
+                    document.getElementById('modelsLoaded').textContent = 'All Models Loaded';
+                    document.getElementById('modelsLoaded').className = 'health-value';
+                    document.getElementById('faceRecognition').textContent = result.face_recognition ? 'Available' : 'Unavailable';
+                    document.getElementById('faceRecognition').className = result.face_recognition ? 'health-value' : 'health-value error';
+                }
+            } catch (error) {
+                console.error('Model status check failed:', error);
+                setAllModelsOffline();
+            }
+        }
+
+        async function checkSystemHealth() {
+            try {
+                const response = await fetch('/health');
+                const result = await response.json();
+                
+                document.getElementById('gpuStatus').textContent = result.gpu_available ? 'Yes' : 'No';
+                document.getElementById('gpuStatus').className = result.gpu_available ? 'health-value' : 'health-value warning';
+                
+                document.getElementById('apiStatus').textContent = result.status === 'healthy' ? 'Online' : 'Offline';
+                document.getElementById('apiStatus').className = result.status === 'healthy' ? 'health-value' : 'health-value error';
+                
+            } catch (error) {
+                document.getElementById('apiStatus').textContent = 'Offline';
+                document.getElementById('apiStatus').className = 'health-value error';
+            }
+        }
+
+        function updateModelStatus(modelType, modelData) {
+            const statusMap = {
+                'plantation': 'plantationStatus',
+                'waste_management': 'wasteStatus', 
+                'stray_animal_feeding': 'animalStatus'
+            };
+            
+            const statsMap = {
+                'plantation': 'plantationStats',
+                'waste_management': 'wasteStats',
+                'stray_animal_feeding': 'animalStats'
+            };
+            
+            const statusElement = document.getElementById(statusMap[modelType]);
+            const statsElement = document.getElementById(statsMap[modelType]);
+            
+            if (modelData && modelData.loaded) {
+                statusElement.querySelector('.status-indicator').className = 'status-indicator online';
+                statusElement.querySelector('.status-text').textContent = 'Online';
+                
+                if (statsElement && modelData.classes) {
+                    statsElement.innerHTML = `
+                        <span>Classes: ${modelData.classes}</span>
+                        <span>Objects: ${modelData.class_names ? modelData.class_names.slice(0, 3).join(', ') + '...' : 'Loading...'}</span>
+                    `;
+                }
+            } else {
+                statusElement.querySelector('.status-indicator').className = 'status-indicator offline';
+                statusElement.querySelector('.status-text').textContent = 'Offline';
+            }
+        }
+
+        function setAllModelsOffline() {
+            ['plantationStatus', 'wasteStatus', 'animalStatus', 'faceStatus'].forEach(id => {
+                const element = document.getElementById(id);
+                element.querySelector('.status-indicator').className = 'status-indicator offline';
+                element.querySelector('.status-text').textContent = 'Offline';
+            });
+            
+            document.getElementById('modelsLoaded').textContent = 'Failed to Load';
+            document.getElementById('modelsLoaded').className = 'health-value error';
+        }
+
+        async function testSpecificModel(modelType) {
+            const button = event.target;
+            button.disabled = true;
+            button.textContent = '🔄 Testing...';
+            
+            try {
+                // Create a test image (canvas with some content)
+                const canvas = document.createElement('canvas');
+                canvas.width = 640;
+                canvas.height = 480;
+                const ctx = canvas.getContext('2d');
+                
+                // Draw a simple test pattern
+                ctx.fillStyle = '#2d8659';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = 'white';
+                ctx.font = '48px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText(`Test ${modelType}`, canvas.width/2, canvas.height/2);
+                
+                // Convert to blob
+                canvas.toBlob(async (blob) => {
+                    const formData = new FormData();
+                    formData.append('activity_image', blob, 'test.jpg');
+                    formData.append('description', 'Model test image');
+                    
+                    const endpoints = {
+                        'plantation': '/api/verify-plantation',
+                        'waste_management': '/api/verify-waste-collection',
+                        'stray_animal_feeding': '/api/verify-animal-feeding'
+                    };
+                    
+                    try {
+                        const response = await fetch(endpoints[modelType], {
+                            method: 'POST',
+                            body: formData
+                        });
+                        
+                        const result = await response.json();
+                        
+                        if (result.success) {
+                            button.textContent = '✅ Test Passed';
+                            button.style.background = '#27ae60';
+                        } else {
+                            button.textContent = '❌ Test Failed';
+                            button.style.background = '#e74c3c';
+                        }
+                        
+                        setTimeout(() => {
+                            button.textContent = '🧪 Test Model';
+                            button.style.background = '';
+                            button.disabled = false;
+                        }, 3000);
+                        
+                    } catch (error) {
+                        button.textContent = '❌ Error';
+                        button.style.background = '#e74c3c';
+                        setTimeout(() => {
+                            button.textContent = '🧪 Test Model';
+                            button.style.background = '';
+                            button.disabled = false;
+                        }, 3000);
+                    }
+                }, 'image/jpeg');
+                
+            } catch (error) {
+                button.textContent = '❌ Error';
+                button.style.background = '#e74c3c';
+                setTimeout(() => {
+                    button.textContent = '🧪 Test Model';
+                    button.style.background = '';
+                    button.disabled = false;
+                }, 3000);
+            }
+        }
+
+        async function testFaceModel() {
+            const button = event.target;
+            button.disabled = true;
+            button.textContent = '🔄 Testing...';
+            
+            try {
+                // Check if face recognition is available
+                const response = await fetch('/health');
+                const result = await response.json();
+                
+                if (result.face_recognition) {
+                    button.textContent = '✅ Available';
+                    button.style.background = '#27ae60';
+                    
+                    // Update face status
+                    const faceStatus = document.getElementById('faceStatus');
+                    faceStatus.querySelector('.status-indicator').className = 'status-indicator online';
+                    faceStatus.querySelector('.status-text').textContent = 'Online';
+                } else {
+                    button.textContent = '❌ Unavailable';
+                    button.style.background = '#e74c3c';
+                }
+                
+                setTimeout(() => {
+                    button.textContent = '🧪 Test Model';
+                    button.style.background = '';
+                    button.disabled = false;
+                }, 3000);
+                
+            } catch (error) {
+                button.textContent = '❌ Error';
+                button.style.background = '#e74c3c';
+                setTimeout(() => {
+                    button.textContent = '🧪 Test Model';
+                    button.style.background = '';
+                    button.disabled = false;
+                }, 3000);
+            }
+        }
+
+        // Initialize Eco-Connect Manager
+        const ecoManager = new EcoConnectManager();
+        
+        // Initialize model status checking
+        document.addEventListener('DOMContentLoaded', () => {
+            checkModelStatus();
+            checkSystemHealth();
+            
+            // Refresh status every 30 seconds
+            setInterval(() => {
+                checkModelStatus();
+                checkSystemHealth();
+            }, 30000);
+        });
+
+        // Logout functionality
+        document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+            e.preventDefault();
+            
+            try {
+                const response = await fetch('/api/logout', {
+                    method: 'POST'
+                });
+                
+                if (response.ok) {
+                    window.location.href = '/auth';
+                }
+            } catch (error) {
+                console.error('Logout error:', error);
+                window.location.href = '/auth';
+            }
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Animated counters
+        function animateCounter(element) {
+            const target = parseInt(element.getAttribute('data-target'));
+            const duration = 2000;
+            const increment = target / (duration / 16);
+            let current = 0;
+
+            const updateCounter = () => {
+                current += increment;
+                if (current < target) {
+                    element.textContent = Math.floor(current).toLocaleString();
+                    requestAnimationFrame(updateCounter);
+                } else {
+                    element.textContent = target.toLocaleString();
+                }
+            };
+
+            updateCounter();
+        }
+
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    
+                    // Animate counters when they come into view
+                    const counters = entry.target.querySelectorAll('[data-target]');
+                    counters.forEach(counter => {
+                        if (!counter.classList.contains('animated')) {
+                            counter.classList.add('animated');
+                            animateCounter(counter);
+                        }
+                    });
+                }
+            });
+        }, observerOptions);
+
+        // Observe all scroll-animate elements
+        document.querySelectorAll('.scroll-animate').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Observe stat cards for counter animation
+        document.querySelectorAll('.stat-card').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+                navbar.style.backdropFilter = 'blur(10px)';
+            } else {
+                navbar.style.background = 'var(--bg-white)';
+                navbar.style.backdropFilter = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
