@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Eco-Connect</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-green: #2d8659;
+            --secondary-green: #3d9970;
+            --light-green: #6ec99d;
+            --mint-green: #a8e6cf;
+            --forest-green: #1b5e42;
+            --bg-white: #ffffff;
+            --text-dark: #2c3e50;
+            --text-light: #5a6c7d;
+            --accent-green: #52c093;
+            --subtle-bg: #f7faf9;
+            --border-light: #e3e8e7;
+            --error-red: #e74c3c;
+            --success-green: #27ae60;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--mint-green) 0%, var(--bg-white) 50%, var(--subtle-bg) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .auth-container {
+            background: var(--bg-white);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: 100%;
+            max-width: 500px;
+            border: 2px solid var(--border-light);
+        }
+
+        .auth-header {
+            background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .auth-header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .auth-header p {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        .auth-form {
+            padding: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            background: var(--bg-white);
+            color: var(--text-dark);
+            font-family: 'Poppins', sans-serif;
+            transition: border-color 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-green);
+        }
+
+        .camera-section {
+            background: var(--subtle-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 2px dashed var(--border-light);
+        }
+
+        .camera-section h3 {
+            color: var(--primary-green);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .camera-container {
+            position: relative;
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto 1rem;
+        }
+
+        #video {
+            width: 100%;
+            height: 200px;
+            border-radius: 12px;
+            background: #000;
+            object-fit: cover;
+        }
+
+        .camera-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            height: 120px;
+            border: 3px solid var(--primary-green);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .capture-controls {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .btn-capture {
+            background: var(--primary-green);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin: 0 5px;
+        }
+
+        .btn-capture:hover {
+            background: var(--secondary-green);
+        }
+
+        .btn-capture:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .captured-images {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            margin-top: 1rem;
+        }
+
+        .captured-image {
+            width: 100%;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 2px solid var(--border-light);
+        }
+
+        .captured-image.filled {
+            border-color: var(--success-green);
+        }
+
+        .capture-status {
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(45, 134, 89, 0.3);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-primary.loading::after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .auth-footer {
+            text-align: center;
+            padding: 1rem 2rem 2rem;
+            color: var(--text-light);
+        }
+
+        .auth-footer a {
+            color: var(--primary-green);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .message {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .message.success {
+            background: rgba(39, 174, 96, 0.1);
+            color: var(--success-green);
+            border: 1px solid rgba(39, 174, 96, 0.3);
+        }
+
+        .message.error {
+            background: rgba(231, 76, 60, 0.1);
+            color: var(--error-red);
+            border: 1px solid rgba(231, 76, 60, 0.3);
+        }
+
+        .message.show {
+            display: flex;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+        }
+
+        @media (max-width: 480px) {
+            .auth-container {
+                margin: 1rem;
+            }
+            
+            .auth-form {
+                padding: 1.5rem;
+            }
+
+            .captured-images {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-header">
+            <div class="logo">
+                <span class="logo-icon">🌿</span>
+                <h1>Join Eco-Connect</h1>
+            </div>
+            <p>Create your account and start making a difference</p>
+        </div>
+
+        <div class="auth-form">
+            <div id="messageArea"></div>
+            
+            <form id="signupForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" class="form-input" required placeholder="Choose a username">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" class="form-input" required placeholder="Enter your email">
+                </div>
+
+                <div class="form-group">
+                    <label for="user_id">User ID</label>
+                    <input type="text" id="user_id" class="form-input" required placeholder="Create a unique user ID">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" class="form-input" required placeholder="Create a password">
+                </div>
+
+                <div class="camera-section">
+                    <h3>📸 Face Verification Setup</h3>
+                    <p style="text-align: center; color: var(--text-light); margin-bottom: 1rem; font-size: 0.9rem;">
+                        We need 5 photos of your face for secure verification during activity uploads
+                    </p>
+                    
+                    <div class="camera-container">
+                        <video id="video" autoplay muted></video>
+                        <div class="camera-overlay"></div>
+                    </div>
+
+                    <div class="capture-controls">
+                        <button type="button" class="btn-capture" id="startCamera">Start Camera</button>
+                        <button type="button" class="btn-capture" id="captureBtn" disabled>Capture Photo</button>
+                        <button type="button" class="btn-capture" id="retakeBtn" disabled>Retake All</button>
+                    </div>
+
+                    <div class="captured-images" id="capturedImages">
+                        <div class="captured-image" id="img1"></div>
+                        <div class="captured-image" id="img2"></div>
+                        <div class="captured-image" id="img3"></div>
+                        <div class="captured-image" id="img4"></div>
+                        <div class="captured-image" id="img5"></div>
+                    </div>
+
+                    <div class="capture-status" id="captureStatus">
+                        Click "Start Camera" to begin face capture (0/5 photos)
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary" id="signupBtn" disabled>
+                    <span>Create Account</span>
+                </button>
+            </form>
+        </div>
+
+        <div class="auth-footer">
+            <p>Already have an account? <a href="login.html">Sign in here</a></p>
+            <p><a href="eco-connect-site.html">← Back to Home</a></p>
+        </div>
+    </div>
+
+    <script>
+        class SignupManager {
+            constructor() {
+                this.capturedImages = [];
+                this.stream = null;
+                this.setupForm();
+                this.setupCamera();
+            }
+
+            setupForm() {
+                const signupForm = document.getElementById('signupForm');
+                signupForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.handleSignup();
+                });
+            }
+
+            setupCamera() {
+                const startCameraBtn = document.getElementById('startCamera');
+                const captureBtn = document.getElementById('captureBtn');
+                const retakeBtn = document.getElementById('retakeBtn');
+
+                startCameraBtn.addEventListener('click', () => this.startCamera());
+                captureBtn.addEventListener('click', () => this.capturePhoto());
+                retakeBtn.addEventListener('click', () => this.retakePhotos());
+            }
+
+            async startCamera() {
+                try {
+                    this.stream = await navigator.mediaDevices.getUserMedia({ 
+                        video: { 
+                            width: 640, 
+                            height: 480,
+                            facingMode: 'user'
+                        } 
+                    });
+                    
+                    const video = document.getElementById('video');
+                    video.srcObject = this.stream;
+                    
+                    document.getElementById('startCamera').disabled = true;
+                    document.getElementById('captureBtn').disabled = false;
+                    document.getElementById('retakeBtn').disabled = false;
+                    
+                    this.updateCaptureStatus();
+                } catch (error) {
+                    console.error('Camera access error:', error);
+                    this.showMessage('❌ Camera access denied. Please allow camera access and try again.', 'error');
+                }
+            }
+
+            capturePhoto() {
+                if (this.capturedImages.length >= 5) return;
+
+                const video = document.getElementById('video');
+                const canvas = document.createElement('canvas');
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(video, 0, 0);
+                
+                const imageData = canvas.toDataURL('image/jpeg', 0.8);
+                this.capturedImages.push(imageData);
+                
+                // Display captured image
+                const imgElement = document.getElementById(`img${this.capturedImages.length}`);
+                imgElement.style.backgroundImage = `url(${imageData})`;
+                imgElement.style.backgroundSize = 'cover';
+                imgElement.style.backgroundPosition = 'center';
+                imgElement.classList.add('filled');
+                
+                this.updateCaptureStatus();
+                
+                if (this.capturedImages.length >= 5) {
+                    document.getElementById('captureBtn').disabled = true;
+                    document.getElementById('signupBtn').disabled = false;
+                    this.showMessage('✅ All 5 photos captured! You can now create your account.', 'success');
+                }
+            }
+
+            retakePhotos() {
+                this.capturedImages = [];
+                
+                // Clear displayed images
+                for (let i = 1; i <= 5; i++) {
+                    const imgElement = document.getElementById(`img${i}`);
+                    imgElement.style.backgroundImage = '';
+                    imgElement.classList.remove('filled');
+                }
+                
+                document.getElementById('captureBtn').disabled = false;
+                document.getElementById('signupBtn').disabled = true;
+                this.updateCaptureStatus();
+            }
+
+            updateCaptureStatus() {
+                const status = document.getElementById('captureStatus');
+                const count = this.capturedImages.length;
+                
+                if (count === 0) {
+                    status.textContent = 'Position your face in the circle and click "Capture Photo" (0/5 photos)';
+                } else if (count < 5) {
+                    status.textContent = `Great! Capture ${5 - count} more photos from different angles (${count}/5 photos)`;
+                } else {
+                    status.textContent = '✅ Perfect! All 5 photos captured. Ready to create account.';
+                    status.style.color = 'var(--success-green)';
+                }
+            }
+
+            async handleSignup() {
+                const username = document.getElementById('username').value;
+                const email = document.getElementById('email').value;
+                const user_id = document.getElementById('user_id').value;
+                const password = document.getElementById('password').value;
+                const signupBtn = document.getElementById('signupBtn');
+
+                if (!username || !email || !user_id || !password) {
+                    this.showMessage('Please fill in all fields', 'error');
+                    return;
+                }
+
+                if (this.capturedImages.length !== 5) {
+                    this.showMessage('Please capture all 5 face photos', 'error');
+                    return;
+                }
+
+                signupBtn.classList.add('loading');
+                signupBtn.disabled = true;
+
+                try {
+                    const formData = new FormData();
+                    formData.append('username', username);
+                    formData.append('email', email);
+                    formData.append('user_id', user_id);
+                    formData.append('password', password);
+                    
+                    // Add face images
+                    this.capturedImages.forEach((imageData, index) => {
+                        // Convert base64 to blob
+                        const byteCharacters = atob(imageData.split(',')[1]);
+                        const byteNumbers = new Array(byteCharacters.length);
+                        for (let i = 0; i < byteCharacters.length; i++) {
+                            byteNumbers[i] = byteCharacters.charCodeAt(i);
+                        }
+                        const byteArray = new Uint8Array(byteNumbers);
+                        const blob = new Blob([byteArray], { type: 'image/jpeg' });
+                        
+                        formData.append(`face_image_${index}`, blob, `face_${index}.jpg`);
+                    });
+
+                    const response = await fetch('/api/register', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        this.showMessage('✅ Account created successfully! Redirecting to login...', 'success');
+                        
+                        // Stop camera
+                        if (this.stream) {
+                            this.stream.getTracks().forEach(track => track.stop());
+                        }
+                        
+                        setTimeout(() => {
+                            window.location.href = 'login.html';
+                        }, 2000);
+                    } else {
+                        this.showMessage(`❌ ${result.message}`, 'error');
+                    }
+
+                } catch (error) {
+                    console.error('Signup error:', error);
+                    this.showMessage('❌ Registration failed. Please try again.', 'error');
+                } finally {
+                    signupBtn.classList.remove('loading');
+                    signupBtn.disabled = false;
+                }
+            }
+
+            showMessage(text, type) {
+                const messageArea = document.getElementById('messageArea');
+                
+                const message = document.createElement('div');
+                message.className = `message ${type} show`;
+                message.innerHTML = `<span>${text}</span>`;
+                
+                messageArea.innerHTML = '';
+                messageArea.appendChild(message);
+                
+                setTimeout(() => {
+                    message.classList.remove('show');
+                    setTimeout(() => messageArea.innerHTML = '', 300);
+                }, 5000);
+            }
+        }
+
+        // Initialize signup manager
+        const signupManager = new SignupManager();
+
+        // Check if already logged in (optional - allow re-registration)
+        // const userData = localStorage.getItem('pravah_user');
+        // if (userData) {
+        //     window.location.href = 'eco-connect-site.html';
+        // }
+    </script>
+</body>
+</html>

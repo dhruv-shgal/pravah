@@ -102,17 +102,66 @@
             color: var(--primary-green);
         }
 
-        .cta-nav {
-            background: var(--primary-green);
-            color: white;
-            padding: 0.5rem 1.5rem;
-            border-radius: 25px;
+        .auth-btn {
+            padding: 0.5rem 1.2rem;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 600;
             transition: all 0.3s ease;
+            margin: 0 0.25rem;
+            display: inline-block;
         }
 
-        .cta-nav:hover {
-            background: var(--forest-green);
+        .login-btn {
+            background: transparent;
+            color: var(--primary-green);
+            border: 2px solid var(--primary-green);
+        }
+
+        .login-btn:hover {
+            background: var(--primary-green);
+            color: white;
             transform: translateY(-2px);
+        }
+
+        .signup-btn {
+            background: var(--primary-green);
+            color: white;
+            border: 2px solid var(--primary-green);
+        }
+
+        .signup-btn:hover {
+            background: var(--forest-green);
+            border-color: var(--forest-green);
+            transform: translateY(-2px);
+        }
+
+        .logout-btn {
+            background: var(--warning-orange);
+            color: white;
+            border: 2px solid var(--warning-orange);
+        }
+
+        .logout-btn:hover {
+            background: #e67e22;
+            border-color: #e67e22;
+            transform: translateY(-2px);
+        }
+
+        .welcome-text {
+            color: var(--primary-green);
+            font-weight: 600;
+            margin-right: 1rem;
+        }
+
+        #authButtons {
+            display: flex;
+            align-items: center;
+        }
+
+        #userSection {
+            display: flex;
+            align-items: center;
         }
 
         /* Theme Toggle */
@@ -1306,16 +1355,23 @@
     <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-container">
-            <a href="index.html" class="logo">
+            <a href="/" class="logo">
                 <span>🌿</span>
-                <span>PRAVAH</span>
+                <span>Eco-Connect</span>
             </a>
-            <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="profile.html">Dashboard</a></li>
-                <li><a href="eco-connect-site.html" class="active">Eco-Connect</a></li>
-                <li><a href="index.html#about">About</a></li>
-                <li><a href="#" id="logoutBtn" class="cta-nav">Logout</a></li>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="guest-mode.html">🎯 Try Guest Mode</a></li>
+                <li><a href="eco-connect-site.html" class="active">Home</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#upload">Upload</a></li>
+                <li id="authButtons">
+                    <a href="login.html" class="auth-btn login-btn">Login</a>
+                    <a href="signup.html" class="auth-btn signup-btn">Sign Up</a>
+                </li>
+                <li id="userSection" style="display: none;">
+                    <span id="welcomeUser" class="welcome-text">Welcome!</span>
+                    <a href="#" id="logoutBtn" class="auth-btn logout-btn">Logout</a>
+                </li>
                 <li>
                     <div class="theme-toggle" id="themeToggle">
                         <div class="toggle-switch" id="toggleSwitch">
@@ -1492,8 +1548,8 @@
         </div>
     </section>
 
-    <!-- Model Testing Section -->
-    <section class="model-testing-section" id="model-testing">
+    <!-- Model Testing Section - REMOVED FOR BETTER UX -->
+    <!--
         <div class="model-container">
             <h2 class="section-title scroll-animate">🤖 AI Model Status</h2>
             
@@ -1601,7 +1657,8 @@
                 </div>
             </div>
         </div>
-    </section>
+    -->
+    <!-- End of removed Model Testing Section -->
 
     <!-- User Stats Section -->
     <section class="stats-section" id="stats">
@@ -1912,20 +1969,70 @@
             }
 
             async init() {
-                // Check if user is logged in
+                // Check authentication state
                 await this.checkUserAuth();
                 
-                if (!this.currentUser) {
-                    // Redirect to auth page if not logged in
-                    window.location.href = '/auth';
-                    return;
+                // Always setup the interface, but disable upload if not logged in
+                this.setupUploadForm();
+                
+                if (this.currentUser) {
+                    // User is logged in - show full functionality
+                    this.updateUserStats();
+                    this.renderRecentUploads();
+                    this.updateBadges();
+                    this.updateUserDisplay();
+                } else {
+                    // User not logged in - show limited functionality with prompts
+                    this.showGuestMode();
+                }
+            }
+
+            showGuestMode() {
+                // Update upload section to show login prompt
+                const uploadSection = document.querySelector('.upload-section');
+                if (uploadSection) {
+                    uploadSection.innerHTML = `
+                        <div style="text-align: center; padding: 3rem; background: var(--subtle-bg); border-radius: 15px; border: 2px dashed var(--border-light);">
+                            <div style="font-size: 3rem; margin-bottom: 1rem;">🔐</div>
+                            <h3 style="color: var(--primary-green); margin-bottom: 1rem;">Login Required</h3>
+                            <p style="color: var(--text-light); margin-bottom: 2rem;">
+                                Create an account or login to upload activities and earn eco-points!
+                            </p>
+                            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                                <a href="signup.html" class="btn btn-primary">
+                                    <i class="fas fa-user-plus"></i> Sign Up Free
+                                </a>
+                                <a href="login.html" class="btn btn-secondary">
+                                    <i class="fas fa-sign-in-alt"></i> Login
+                                </a>
+                                <a href="guest-mode.html" class="btn btn-secondary">
+                                    <i class="fas fa-eye"></i> Try Guest Mode
+                                </a>
+                            </div>
+                        </div>
+                    `;
                 }
 
-                this.setupUploadForm();
-                this.updateUserStats();
-                this.renderRecentUploads();
-                this.updateBadges();
-                this.updateUserDisplay();
+                // Hide user stats and show guest message
+                const statsSection = document.getElementById('stats');
+                if (statsSection) {
+                    statsSection.innerHTML = `
+                        <div class="stats-container">
+                            <h2 class="section-title">Join Our Community</h2>
+                            <div style="text-align: center; padding: 3rem;">
+                                <div style="font-size: 4rem; margin-bottom: 2rem;">🌍</div>
+                                <h3 style="color: var(--primary-green); margin-bottom: 1rem;">Ready to Make a Difference?</h3>
+                                <p style="color: var(--text-light); margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+                                    Join thousands of eco-warriors who are making a real impact. Track your activities, earn points, and help save our planet!
+                                </p>
+                                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                                    <a href="signup.html" class="btn btn-primary">Get Started Free</a>
+                                    <a href="guest-mode.html" class="btn btn-secondary">Try Without Account</a>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
             }
 
             async checkUserAuth() {
@@ -1933,26 +2040,41 @@
                 const userData = localStorage.getItem('pravah_user');
                 if (userData) {
                     this.currentUser = JSON.parse(userData);
+                    this.updateNavbar(true);
                     return;
                 }
                 
-                // Fallback to API check
+                // If no user data, show login/signup options (don't redirect)
+                this.updateNavbar(false);
+                
+                // Still check API but don't redirect
                 try {
                     const response = await fetch('/api/user-info');
                     const result = await response.json();
                     
                     if (result.logged_in) {
                         this.currentUser = result;
-                        // Store in localStorage for consistency
                         localStorage.setItem('pravah_user', JSON.stringify(result));
-                    } else {
-                        // Redirect to login if not authenticated
-                        window.location.href = '/login.html';
+                        this.updateNavbar(true);
                     }
                 } catch (error) {
                     console.error('Auth check failed:', error);
-                    // Redirect to login on error
-                    window.location.href = '/login.html';
+                    // Don't redirect on error, just show login options
+                }
+            }
+
+            updateNavbar(isLoggedIn) {
+                const authButtons = document.getElementById('authButtons');
+                const userSection = document.getElementById('userSection');
+                const welcomeUser = document.getElementById('welcomeUser');
+
+                if (isLoggedIn && this.currentUser) {
+                    authButtons.style.display = 'none';
+                    userSection.style.display = 'flex';
+                    welcomeUser.textContent = `Welcome, ${this.currentUser.username}!`;
+                } else {
+                    authButtons.style.display = 'flex';
+                    userSection.style.display = 'none';
                 }
             }
 
@@ -2096,7 +2218,7 @@
                     const verificationResult = await this.verifyWithAI(fileInput.files[0], activityType, description);
                     
                     if (verificationResult.success && verificationResult.verified) {
-                        const points = verificationResult.points;
+                        const points = verificationResult.points || 0;
                         const upload = {
                             id: Date.now(),
                             image: await this.fileToBase64(fileInput.files[0]),
@@ -2105,14 +2227,19 @@
                             points: points,
                             timestamp: new Date().toISOString(),
                             verified: true,
+                            face_matched: verificationResult.face_matched,
                             verificationDetails: verificationResult.verification_details
                         };
 
                         this.uploads.unshift(upload);
                         this.saveUploads();
 
-                        // Update user stats
-                        this.userStats.totalPoints += points;
+                        // Update user stats from server response if available
+                        if (verificationResult.total_points !== undefined) {
+                            this.userStats.totalPoints = verificationResult.total_points;
+                        } else {
+                            this.userStats.totalPoints += points;
+                        }
                         this.userStats.totalActivities += 1;
                         
                         switch(activityType) {
@@ -2152,23 +2279,23 @@
             }
 
             async verifyWithAI(file, activityType, description) {
-                // Use specific API endpoints for different activities
-                const apiEndpoints = {
-                    'plantation': '/api/verify-plantation',
-                    'waste_collection': '/api/verify-waste-collection',
-                    'animal_feeding': '/api/verify-animal-feeding'
+                // Use the working verify-task endpoint
+                const taskTypeMap = {
+                    'plantation': 'plantation',
+                    'waste_collection': 'waste_management',
+                    'animal_feeding': 'stray_animal_feeding'
                 };
-
-                const endpoint = apiEndpoints[activityType] || '/api/verify-activity';
                 
                 const formData = new FormData();
-                formData.append('activity_image', file);
-                if (endpoint === '/api/verify-activity') {
-                    formData.append('activity_type', activityType);
+                formData.append('task_image', file);
+                formData.append('task_type', taskTypeMap[activityType]);
+                
+                // Add username if logged in for face verification
+                if (this.currentUser && this.currentUser.username) {
+                    formData.append('username', this.currentUser.username);
                 }
-                formData.append('description', description);
 
-                const response = await fetch(endpoint, {
+                const response = await fetch('/api/verify-task', {
                     method: 'POST',
                     body: formData
                 });
@@ -2177,7 +2304,18 @@
                     throw new Error('Verification request failed');
                 }
 
-                return await response.json();
+                const result = await response.json();
+                
+                // Transform the response to match expected format
+                return {
+                    success: result.overall_valid,
+                    verified: result.overall_valid,
+                    message: result.message || 'Verification complete',
+                    points: result.points || this.getPointsForActivity(activityType),
+                    face_matched: result.face_matched,
+                    total_points: result.total_points,
+                    verification_details: result.steps
+                };
             }
 
             getPointsForActivity(activityType) {
@@ -2548,16 +2686,14 @@
             e.preventDefault();
             
             try {
-                const response = await fetch('/api/logout', {
-                    method: 'POST'
-                });
+                // Clear local storage
+                localStorage.removeItem('pravah_user');
                 
-                if (response.ok) {
-                    window.location.href = '/auth';
-                }
+                // Refresh the page to show login state
+                window.location.reload();
             } catch (error) {
                 console.error('Logout error:', error);
-                window.location.href = '/auth';
+                window.location.reload();
             }
         });
 
